@@ -1,7 +1,12 @@
+
 $mainColor: #057f8e;
 $mainColor1: #002aff;
 .App {
   text-align: center;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+
   .App-header {
     background-color: $mainColor;
     min-height: 100vh;
@@ -24,8 +29,6 @@ $mainColor1: #002aff;
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
-
 
 .App-link {
   color: $mainColor1;
