@@ -1,0 +1,85 @@
+.body {
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	overflow: hidden;
+}
+
+.overlay {
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	display: flex;
+	width: 100vw;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 16px;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	background-color: var(--overlay);
+	cursor: pointer;
+	overflow: auto;
+}
+.title {
+	user-select: none;
+	text-align: center;
+	color: var(--text);
+	font-size: var(--title-size);
+	font-weight: 400;
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 15px;
+}
+
+.contentWrapper {
+	margin: auto;
+	outline: thin;
+	perspective: 450px;
+}
+.contentInner {
+	margin: auto;
+	padding: 20px 15px;
+	cursor: auto;
+	position: relative;
+	background-color: var(--bg-main);
+	border-radius: 16px;
+	outline: thin;
+	transition: all 0.9s ease-in-out;
+}
+
+:global(.ReactModal__Overlay) {
+	opacity: 0;
+	transition: opacity 0.5s ease-in-out;
+	overflow: auto;
+}
+
+:global(.ReactModal__Overlay--after-open) {
+	opacity: 1;
+	overflow: auto;
+	z-index: 101;
+	visibility: visible;
+}
+
+:global(.ReactModal__Overlay--before-close) {
+	opacity: 0;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+:global(.ReactModal__Content) {
+	.contentInner {
+		transform: rotateX(55deg) translateY(-200px) scale(0.5);
+		transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	}
+}
+
+:global(.ReactModal__Content--after-open) {
+	.contentInner {
+		transform: rotateX(0deg) translateY(0px) scale(1);
+	}
+}
+
+:global(.ReactModal__Content--before-close) {
+	.contentInner {
+		transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+		transform: rotateX(-55deg) translateY(200px) scale(0.7);
+	}
+}
