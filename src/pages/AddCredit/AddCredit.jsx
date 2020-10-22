@@ -1,9 +1,10 @@
 import React from "react";
+import style from "./AddCredit.module.scss";
 
 const AddCredit = () => {
   return (
-    <div>
-      <h1>addCredit</h1>
+    <div className={style.wrapper}>
+      <h2>Расход средств</h2>
     </div>
   );
 };

@@ -1,0 +1,44 @@
+@import "./src/style/mixins";
+
+.wrapper {
+  user-select: none;
+  --width-info: 300px;
+  @include wrapperPages;
+
+  .container_sections {
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    background-color: #48474F;
+    border-radius: 10px;
+    margin: 20px auto;
+
+    .infoTitle {
+      @include aloneCenterPosition;
+      width: var(--width-info);
+      height: 40px;
+      margin: 0 auto 10px auto;
+      background-color: #37363E;
+      border-radius: 10px;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+
+    .listCategories {
+      width: var(--width-info);
+      height: 360px;
+      margin: 0 auto 10px auto;
+      padding-top: 5px;
+      background-color: #37363E;
+      border-radius: 10px;
+      font-size: 36px;
+      font-style: italic;
+      color: var(--color-text);
+      overflow-y: auto;
+    }
+  }
+
+  .buttonTopMargin {
+    margin-top: 10px;
+  }
+}

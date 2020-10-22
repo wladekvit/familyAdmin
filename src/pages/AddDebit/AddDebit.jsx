@@ -1,9 +1,10 @@
 import React from "react";
+import style from "./AddDebit.module.scss"
 
 const AddDebit = () => {
   return (
-    <div>
-      <h1>addDebit</h1>
+    <div className={style.wrapper}>
+      <h2>Приход средств</h2>
     </div>
   );
 };

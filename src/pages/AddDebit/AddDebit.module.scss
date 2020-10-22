@@ -1,0 +1,4 @@
+@import "./src/style/mixins";
+.wrapper {
+  @include wrapperPages;
+}

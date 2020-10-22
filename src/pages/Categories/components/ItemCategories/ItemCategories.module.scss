@@ -1,0 +1,49 @@
+@import "./src/style/mixins";
+.wrapper {
+  user-select: none;
+  position: relative;
+  width: 97%;
+  height: 35px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: #5c615e;
+  color: var(--color-text);
+  overflow: hidden;
+  margin: 0 auto 5px auto;
+
+  .leftTag {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 10px;
+    height: 100%;
+    background-color: var(--color-text);
+  }
+
+  span {
+    margin-left: 20px;
+    font-style: normal;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .deleteItem, .editItem {
+    cursor: pointer;
+    @include aloneCenterPosition;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    width: 20px;
+    height: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    svg {
+      width: 90%;
+    }
+  }
+  .editItem {
+    right: 50px;
+  }
+}
