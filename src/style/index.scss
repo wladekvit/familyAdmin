@@ -1,4 +1,23 @@
+:root {
+  --accent: #A16FE1;
+  --color-text: #c1c1c1;
+  --overlay: rgba(0, 0, 0, 0.85);
+  --text: #ffffff;
+  --border: #48474f;
+  --bg-main: #37363e;
+  --input-background: #48474F;
+
+  //TEXT
+  --title-size: 14px;
+  --font-sizeL: 16px;
+  --font-sizeM: 14px;
+  --font-sizeS: 12px;
+  --font-sizeXS: 10px;
+
+
+}
 body {
+
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
