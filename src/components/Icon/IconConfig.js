@@ -80,5 +80,10 @@ export default {
         fill={fill}
       />
     </svg>
+  ),
+  bird: () => (
+    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1.5 6L6.5 12L16 1.5" stroke="#2B8C5D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
   )
 };

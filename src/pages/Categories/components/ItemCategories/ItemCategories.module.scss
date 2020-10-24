@@ -30,6 +30,15 @@
     letter-spacing: 1.5px;
   }
 
+  .inputEdit {
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    background-color: var(--color-text);
+    padding-left: 25px;
+    z-index: 2;
+  }
+
   .deleteItem, .editItem {
     cursor: pointer;
     @include aloneCenterPosition;
@@ -43,7 +52,30 @@
       width: 90%;
     }
   }
+
   .editItem {
     right: 50px;
   }
+}
+
+:global(.inputEdit-enter) {
+  transform: translateX(calc(var(--width-info) * -1));
+}
+
+:global(.inputEdit-enter-active) {
+  transform: translateX(-50px);
+  transition: transform 500ms linear;
+}
+
+:global(.inputEdit-enter-done) {
+  transform: translateX(-5px);
+}
+
+:global(.inputEdit-exit) {
+  transform: translateX(-5px);
+}
+
+:global(.inputEdit-exit-active) {
+  transform: translateX( calc(var(--width-info) * -1) );
+  transition: transform 500ms linear;
 }

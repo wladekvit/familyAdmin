@@ -2,7 +2,6 @@
 
 .wrapper {
   user-select: none;
-  --width-info: 300px;
   @include wrapperPages;
 
   .container_sections {

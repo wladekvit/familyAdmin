@@ -8,8 +8,7 @@ import ItemCategories from "./components/ItemCategories";
 import ModalAddCategories from "./components/ModalAddCategories";
 import ModalRemoveCategory from "./components/ModalRemoveCategory";
 import addCategories from "../../queries/addCategories";
-
-//UPDATE `categories` SET `name` = 'счета' WHERE `categories`.`id` = 22;
+import editCategories from "../../queries/editCategory";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -49,6 +48,23 @@ const Categories = () => {
     });
   };
   
+  const editCategory = (oldName, newName) => {
+    const oN = oldName.trim().toLowerCase();
+    const nN = newName.trim().toLowerCase();
+    if (nN === "" || nN === oN) {
+      return;
+    }
+    console.log(oN, nN);
+    const objParams = editCategories(oldName.toLowerCase(), newName.toLowerCase());
+    restRequest(objParams).then((data) => {
+      console.log(data);
+      if (data) {
+        onClickGetCategories();
+      }
+    });
+    
+  };
+  
   const setCurrentNameCategory = (name) => {
     setCurrentName(name);
     setOpenModalDelCat(true);
@@ -73,6 +89,7 @@ const Categories = () => {
               key={index}
               name={category}
               onRemoveCategories={setCurrentNameCategory}
+              onEditCategories={editCategory}
             />
           ))}
         </div>
