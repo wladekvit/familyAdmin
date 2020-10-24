@@ -1,0 +1,71 @@
+@import "./src/style/mixins";
+
+$widthWrapper: 320px;
+.wrapper {
+  @include wrapperPages;
+  text-align: center;
+
+  .container_sections {
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    background-color: #48474F;
+    border-radius: 10px;
+    margin: 20px auto;
+
+    .infoTitle {
+      @include aloneCenterPosition;
+      width: $widthWrapper;
+      height: 70px;
+      margin: 0 auto 10px auto;
+      background-color: #37363E;
+      border-radius: 10px;
+      text-transform: uppercase;
+      color: var(--color-text);
+
+    }
+
+    .infoCredit {
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: center;
+      width: $widthWrapper;
+      height: 300px;
+      margin: 0 auto 10px auto;
+      background-color: #37363E;
+      border-radius: 10px;
+      color: var(--color-text);
+      text-align: left;
+
+      span {
+        width: 94%;
+        user-select: none;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      input {
+        color: var(--accent);
+        width: 90%;
+        border: 0;
+        border-radius: 6px;
+        height: 40px;
+        background-color: var(--input-background);
+        padding: 0 10px;
+        font-size: 18px;
+      }
+
+      input {
+        -webkit-appearance: none;
+      }
+
+      .input:focus {
+        outline: none !important;
+      }
+    }
+  }
+
+
+}
+

@@ -59,6 +59,13 @@ const LeftMenu = () => {
             clickItemMenu={clickItemLinc}
             currentPath={currentPath}
           />
+          <ItemMenu
+            nameIcon="itemMenu"
+            title="Товары услуги продукты"
+            path={routes.products}
+            clickItemMenu={clickItemLinc}
+            currentPath={currentPath}
+          />
         </div>
       </CSSTransition>
       <CSSTransition

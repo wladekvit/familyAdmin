@@ -2,19 +2,10 @@ import React from "react";
 // import PropTypes from "prop-types";
 import style from "./Home.module.scss";
 import Button from "../../components/Button";
-import { restRequest } from "../../utils/restRequest";
-import getCategories from "../../queries/getCategories";
-import addCategories from "../../queries/addCategories";
-
+// import { restRequest } from "../../utils/restRequest";
 
 const Home = () => {
-  const onClickButtonUpdate = async () => {
-    // const objParams = addCategories("Напитки");
-    const objParams = getCategories();
-    restRequest(objParams).then((data) => {
-      console.log(data);
-    });
-  };
+  const onClickButtonUpdate = async () => {};
   return (
     <div className={style.wrapper}>
       <h2>Приходы и расходы</h2>
