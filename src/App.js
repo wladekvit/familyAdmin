@@ -3,7 +3,6 @@ import './App.scss';
 import LeftMenu from "./components/LeftMenu";
 import {Router} from "./pages/router";
 import {BrowserRouter} from "react-router-dom";
-import {initialisationDataStore} from "./utils/initialisation";
 
 function App() {
   

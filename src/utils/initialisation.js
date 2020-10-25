@@ -14,3 +14,12 @@ export const initialisationDataStore = () => {
   });
   
 };
+
+export const errorProcessing = (err, setMessageModal, setInfoModal, setSuccessModal) => {
+  const cod = Object.keys(err)[0];
+  const errMessage = err[cod];
+  setMessageModal(`Ошибка!!! ${errMessage}`);
+  setInfoModal(true);
+  setSuccessModal(false);
+  console.log("error", Object.keys(err)[0]);
+};

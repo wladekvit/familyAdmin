@@ -1,7 +1,7 @@
-const removeCategories = (name) => {
+const removeCategories = (id) => {
   return {
     action: 'deleteCategories',
-    name
+    id
   };
 }
 export default removeCategories;

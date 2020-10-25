@@ -1,9 +1,8 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
 import React, {createRef, useEffect, useState} from "react";
 import style from "./ModalAddCategories.module.scss";
 import Modal from "../../../../components/Modal";
 import Button from "../../../../components/Button";
-import addCategories from "../../../../queries/addCategories";
-import { restRequest } from "../../../../utils/restRequest";
 
 const ModalAddCategories = ({ isOpen, closeOpen, onClickAddCategories }) => {
   const [value, setValue] = useState("");

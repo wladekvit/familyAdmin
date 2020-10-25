@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import style from "./LeftMenu.module.scss";
 import Icon from "../Icon/Icon";
@@ -10,6 +10,8 @@ const LeftMenu = () => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState(history.location.pathname);
+  const menuRef = useRef();
+  const curtainRef = useRef();
 
   const clickItemLinc = (path) => {
     setCurrentPath(path);
@@ -23,13 +25,14 @@ const LeftMenu = () => {
         <Icon name="menuHamburger" />
       </div>
       <CSSTransition
+        nodeRef={menuRef}
         in={isOpen}
         timeout={parseInt(style.menuCloseDuration)}
         classNames="container_menu"
         unmountOnExit
         onExited={() => history.push(currentPath)}
       >
-        <div className={style.container_menu} onClick={() => setIsOpen(false)}>
+        <div className={style.container_menu} onClick={() => setIsOpen(false)} ref={menuRef}>
           <h2>Меню</h2>
           <ItemMenu
             nameIcon="itemMenu"
@@ -69,12 +72,13 @@ const LeftMenu = () => {
         </div>
       </CSSTransition>
       <CSSTransition
+        nodeRef={curtainRef}
         in={isOpen}
         timeout={parseInt(style.menuCloseDuration)}
         classNames="curtain"
         unmountOnExit
       >
-        <div className={style.curtain} onClick={() => setIsOpen(false)} />
+        <div className={style.curtain} onClick={() => setIsOpen(false)} ref={curtainRef} />
       </CSSTransition>
     </Fragment>
   );

@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import style from "./ModalSelectCategory.module.scss";
-import Modal from "../../../components/Modal";
+import Modal from "../../../../components/Modal";
 
 const ModalSelectCategory = ({ isOpen, closeOpen, onSelectCategories, categories }) => {
   const selCategories = (e) => {
@@ -9,14 +9,13 @@ const ModalSelectCategory = ({ isOpen, closeOpen, onSelectCategories, categories
     onSelectCategories(catName);
     closeOpen(false);
   };
-  useEffect(() => {}, []);
 
   return (
     <Modal isOpen={isOpen} onRequestClose={() => closeOpen(false)} title="Список категорий‍">
       <div className={style.modalAddCat}>
         {categories.map((cat, i) => (
-          <div key={i} className={style.itemCat} onClick={selCategories} data-cat={cat}>
-            <span>{cat}</span>
+          <div key={i} className={style.itemCat} onClick={selCategories} data-cat={cat.name}>
+            <span>{cat.name}</span>
           </div>
         ))}
       </div>

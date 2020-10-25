@@ -81,9 +81,53 @@ export default {
       />
     </svg>
   ),
-  bird: () => (
-    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1.5 6L6.5 12L16 1.5" stroke="#00ff00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  bird: ({ ...props }) => (
+    <svg
+      width="17"
+      height="13"
+      viewBox="0 0 17 13"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M1.5 6L6.5 12L16 1.5"
+        stroke="#00ff00"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+  cross: ({ ...props }) => (
+    <svg
+      width="17"
+      height="17"
+      viewBox="0 0 17 17"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <line
+        x1="0.919239"
+        y1="1"
+        x2="16"
+        y2="16.0808"
+        stroke="#FD4343"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <line
+        x1="16"
+        y1="0.919239"
+        x2="0.919239"
+        y2="16"
+        stroke="#FD4343"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 };

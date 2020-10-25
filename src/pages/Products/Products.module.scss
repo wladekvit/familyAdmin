@@ -26,9 +26,10 @@ $widthWrapper: 320px;
     }
 
     .infoCredit {
+      position: relative;
       display: flex;
       flex-direction: column;
-      justify-content: start;
+      justify-content: flex-start;
       align-items: center;
       width: $widthWrapper;
       height: 300px;
@@ -62,6 +63,24 @@ $widthWrapper: 320px;
 
       .input:focus {
         outline: none !important;
+      }
+
+      .findContainer {
+        position: absolute;
+        width: 86%;
+        height: fit-content;
+        left: 0;
+        bottom: 96px;
+        background-color: #37363ee6;
+        padding: 0 7%;
+        max-height: 200px;
+        overflow: hidden;
+        font-size: 20px;
+
+        span {
+          display: block;
+        }
+
       }
     }
   }

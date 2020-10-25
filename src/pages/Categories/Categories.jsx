@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from "react";
 import style from "./Categories.module.scss";
 import Button from "../../components/Button";
@@ -9,29 +10,44 @@ import ModalAddCategories from "./components/ModalAddCategories";
 import ModalRemoveCategory from "./components/ModalRemoveCategory";
 import addCategories from "../../queries/addCategories";
 import editCategories from "../../queries/editCategory";
+import ModalInfo from "../../components/ModalInfo";
+import {errorProcessing} from "../../utils/initialisation";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [currentName, setCurrentName] = useState("");
   const [openModalAddCat, setOpenModalAddCat] = useState(false);
   const [openModalDelCat, setOpenModalDelCat] = useState(false);
+  //info modal
+  const [infoModal, setInfoModal] = useState(false);
+  const [messageModal, setMessageModal] = useState("");
+  const [successModal, setSuccessModal] = useState(true);
   
-  const onClickGetCategories = async () => {
+  const onClickGetCategories = () => {
     const objParams = getCategories();
     restRequest(objParams).then((data) => {
-      const categoriesNameArr = data.map((item) => item.name.toLowerCase()).sort();
-      setCategories(categoriesNameArr);
-      if (openModalDelCat) {
-        setOpenModalDelCat(false);
+      if (data && data.hasOwnProperty("error")) {
+        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+      } else {
+        data.sort((a, b) => (a.name > b.name ? 1 : -1));
+        setCategories(data);
+        if (openModalDelCat) {
+          setOpenModalDelCat(false);
+        }
+        console.log(data);
       }
-      console.log(data, categoriesNameArr);
     });
   };
   
   const onClickAddCategories = (name) => {
     const objParams = addCategories(name.toLowerCase());
     restRequest(objParams).then((data) => {
-      if (data) {
+      if (data && data.hasOwnProperty("error")) {
+        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+      } else {
+        setMessageModal(`Успех!!! Категория ${name.toUpperCase()} добавлена в базу 😊`);
+        setInfoModal(true);
+        setSuccessModal(true);
         onClickGetCategories();
       }
     });
@@ -39,26 +55,42 @@ const Categories = () => {
   };
   
   const delCategories = (name) => {
-    const objParams = removeCategories(name.toLowerCase());
+    const findCat = categories.find((cat) => name === cat.name);
+    const objParams = removeCategories(findCat.id);
     restRequest(objParams).then((data) => {
       console.log(data);
-      if (data) {
+      if (data && data.hasOwnProperty("error")) {
+        if (openModalDelCat) {
+          setOpenModalDelCat(false);
+        }
+        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+      } else {
+        setMessageModal(`Успех!!! Название категории удалено из базы 😴`);
+        setInfoModal(true);
+        setSuccessModal(true);
         onClickGetCategories();
       }
     });
   };
   
   const editCategory = (oldName, newName) => {
+    
     const oN = oldName.trim().toLowerCase();
     const nN = newName.trim().toLowerCase();
+    const findCat = categories.find((cat) => oldName === cat.name);
+    
     if (nN === "" || nN === oN) {
       return;
     }
-    console.log(oN, nN);
-    const objParams = editCategories(oldName.toLowerCase(), newName.toLowerCase());
+    const objParams = editCategories(findCat.id, newName.toLowerCase());
     restRequest(objParams).then((data) => {
       console.log(data);
-      if (data) {
+      if (data && data.hasOwnProperty("error")) {
+        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+      } else {
+        setMessageModal(`Успех!!! Название категории изменено в базе`);
+        setInfoModal(true);
+        setSuccessModal(true);
         onClickGetCategories();
       }
     });
@@ -84,10 +116,10 @@ const Categories = () => {
           <span>список категорий</span>
         </div>
         <div className={style.listCategories}>
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <ItemCategories
-              key={index}
-              name={category}
+              key={category.id}
+              name={category.name}
               onRemoveCategories={setCurrentNameCategory}
               onEditCategories={editCategory}
             />
@@ -110,6 +142,13 @@ const Categories = () => {
         closeOpen={setOpenModalDelCat}
         name={currentName}
         onClickRemoveCategories={delCategories}
+      />
+      <ModalInfo
+        isOpen={infoModal}
+        message={messageModal}
+        success={successModal}
+        closeModalInfo={setInfoModal}
+        duration={5000}
       />
     </div>
   );

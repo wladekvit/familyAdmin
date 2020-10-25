@@ -1,7 +1,7 @@
-const editCategories = (oldName, newName) => {
+const editCategories = (id, newName) => {
   return {
     action: 'editCategories',
-    oldName,
+    id,
     newName
   };
 }

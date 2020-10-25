@@ -1,0 +1,52 @@
+$durationAnimation: 700ms;
+.wrapper {
+  width: 250px;
+  height: 250px;
+  position: fixed;
+  top: 20px;
+  left: calc(100vw / 2 - 125px);
+  border-radius: 20px;
+  background-color: var(--input-background);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .imageInfo {
+    width: 85px;
+    height: 85px;
+
+    svg {
+      width: 100%;
+    }
+  }
+
+  span {
+    display: block;
+    width: 70%;
+    text-align: center;
+  }
+
+}
+
+:global(.wrapper-enter) {
+  transform: translateY(-270px);
+}
+
+:global(.wrapper-enter-active) {
+  transform: translateY(0);
+  transition: transform $durationAnimation cubic-bezier(1,-0.83,0,1.68)
+}
+
+:global(.wrapper-exit) {
+  transform: translateX(0);
+}
+
+:global(.wrapper-exit-active) {
+  transform: translateY(-270px);
+  transition: transform $durationAnimation cubic-bezier(1,-0.83,0,1.68)
+}
+
+:export {
+  durationAnimation: $durationAnimation;
+}
