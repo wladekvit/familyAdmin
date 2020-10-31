@@ -97,7 +97,7 @@ const Products = () => {
       });
   }, []);
 
-  const disableAddButton = productName !== "" && selCategory?.name !== "" && selUnits?.name !== "";
+  const disableAddButton = productName !== "" && selCategory && selCategory?.name !== "" && selUnits && selUnits?.name !== "";
 
   return (
     <div className={style.wrapper}>

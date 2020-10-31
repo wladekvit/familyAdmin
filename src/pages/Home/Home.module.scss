@@ -3,6 +3,7 @@
 .wrapper {
   --width-info: 280px;
   @include wrapperPages;
+  text-align: center;
 
   .container_sections {
     width: fit-content;

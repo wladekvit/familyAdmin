@@ -5,8 +5,9 @@ import Modal from "../../../../components/Modal";
 
 const ModalSelectCategory = ({ isOpen, closeOpen, onSelectCategories, categories }) => {
   const selCategories = (e) => {
-    const catName = e.target.getAttribute("data-cat");
-    onSelectCategories(catName);
+    const id = +e.target.getAttribute("data-id");
+    const selCat = categories.find((ob) => ob.id === id);
+    onSelectCategories(selCat);
     closeOpen(false);
   };
 
@@ -14,7 +15,7 @@ const ModalSelectCategory = ({ isOpen, closeOpen, onSelectCategories, categories
     <Modal isOpen={isOpen} onRequestClose={() => closeOpen(false)} title="Список категорий‍">
       <div className={style.modalAddCat}>
         {categories.map((cat, i) => (
-          <div key={i} className={style.itemCat} onClick={selCategories} data-cat={cat.name}>
+          <div key={i} className={style.itemCat} onClick={selCategories} data-id={cat.id}>
             <span>{cat.name}</span>
           </div>
         ))}

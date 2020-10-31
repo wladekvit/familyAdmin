@@ -7,6 +7,30 @@
 	height: 100%;
 }
 
+@mixin inputWrapper {
+	color: var(--accent);
+	width: 90%;
+	border: 0;
+	border-radius: 6px;
+	height: 40px;
+	background-color: var(--input-background);
+	padding: 0 10px;
+	font-size: 18px;
+	-webkit-appearance: none;
+	&:focus {
+		outline: none !important;
+	}
+}
+
+@mixin spanFromInput {
+	width: 94%;
+	user-select: none;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	text-align: start;
+}
+
 @mixin wrapperPages {
 	position: absolute;
 	width: 100%;
