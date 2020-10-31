@@ -35,11 +35,9 @@ const AddCredit = () => {
       })
       .catch(() => {});
   };
-
   const onSelectProduct = (selectProduct) => {
     setSelProduct(selectProduct);
   };
-
   const onClickButtonUpdate = () => {
     const objParams = addPurchases(
       selDate,
@@ -55,7 +53,7 @@ const AddCredit = () => {
         errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
       } else {
         setMessageModal(
-          `Успех!!! Покупка ${selProduct.name.toUpperCase()} по цене ${price} грн, в количестве ${quantity} добавлена в базу 😊`
+          `Успех!!! Покупка ${selProduct.name.toUpperCase()} по цене ${price} грн, в количестве ${quantity} (${getUnitProduct()}) добавлена в базу 😊`
         );
         setInfoModal(true);
         setSuccessModal(true);
@@ -64,16 +62,16 @@ const AddCredit = () => {
       }
     });
   };
-
   const getDisableButton = () => {
     return selProduct && selCategory && quantity !== "" && price !== "";
   };
-
   const onKeyDownHandler = useCallback ((e) => {
-    // console.log(e);
-    const { keyCode } = e;
-    switch (keyCode) {
+    // console.log(e.which);
+    // alert(e.which);
+    const { which } = e;
+    switch (which) {
       case 13:
+        document.activeElement.blur()
         if (getDisableButton()) {
           onClickButtonUpdate();
         }
@@ -82,17 +80,14 @@ const AddCredit = () => {
         break;
     }
   }, [selProduct, selCategory, quantity, price])
-
   const onChangePrice = (e) => {
     const prs = e.target.value.replace(",", ".");
     setPrice(prs);
   };
-
   const onChangeQuantity = (e) => {
     const prs = e.target.value.replace(",", ".");
     setQuantity(prs);
   };
-
   const getCurrentDate = (selectionDate) => {
     //format: 2012-06-01
     const date = selectionDate ? new Date(selectionDate) : new Date();
@@ -104,11 +99,9 @@ const AddCredit = () => {
 
     return `${year}-${mouth}-${day}`;
   };
-
   const onChangeDate = (e) => {
     setSelDate(getCurrentDate(e.target.value));
   };
-
   const getUnitProduct = () => {
     if (selProduct) {
       const un = units.find((u) => u.id === +selProduct.unit);

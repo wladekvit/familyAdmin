@@ -36,21 +36,21 @@ const LeftMenu = () => {
           <h2>Меню</h2>
           <ItemMenu
             nameIcon="itemMenu"
-            title="Приход-расход"
+            title="Главная"
             path={routes.home}
             clickItemMenu={clickItemLinc}
             currentPath={currentPath}
           />
           <ItemMenu
             nameIcon="itemMenu"
-            title="Добавить приход"
+            title="Приход"
             path={routes.addDebit}
             clickItemMenu={clickItemLinc}
             currentPath={currentPath}
           />
           <ItemMenu
             nameIcon="itemMenu"
-            title="Добавить расход"
+            title="Расходы"
             path={routes.addCredit}
             clickItemMenu={clickItemLinc}
             currentPath={currentPath}
@@ -64,7 +64,7 @@ const LeftMenu = () => {
           />
           <ItemMenu
             nameIcon="itemMenu"
-            title="Товары услуги продукты"
+            title="виды товаров"
             path={routes.products}
             clickItemMenu={clickItemLinc}
             currentPath={currentPath}

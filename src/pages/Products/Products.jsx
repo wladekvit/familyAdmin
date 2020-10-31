@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import style from "./Products.module.scss";
 import Button from "../../components/Button";
 import ModalSelectCategory from "./components/ModalSelectCategory";
@@ -28,7 +28,24 @@ const Products = () => {
   const onChangeInput = (e) => {
     setProductName(e.target.value.toLowerCase());
   };
-
+  const getDisableButton = () => {
+    return productName !== "" && selCategory && selCategory?.name !== "" && selUnits && selUnits?.name !== "";
+  };
+  const onKeyDownHandler = useCallback ((e) => {
+    // console.log(e.which);
+    // alert(e.which);
+    const { which } = e;
+    switch (which) {
+      case 13:
+        document.activeElement.blur()
+        if (getDisableButton()) {
+          onClickButtonAdd();
+        }
+        break;
+      default:
+        break;
+    }
+  }, [productName, selCategory, selUnits])
   const onClickButtonAdd = () => {
     const objParams = addProducts(productName, selCategory.id, selUnits.id);
     setProductName("");
@@ -40,15 +57,14 @@ const Products = () => {
         setInfoModal(true);
         setSuccessModal(true);
         if (selCategory) {
-          onSelectCategory(selCategory.name);
+          onSelectCategory(selCategory);
         }
       }
     });
   };
-  const onSelectCategory = (name) => {
-    const findCat = categories.find((cat) => cat.name === name);
-    setSelCategory(findCat);
-    const objParams = getProducts(findCat.id);
+  const onSelectCategory = (selectionCategory) => {
+    setSelCategory(selectionCategory);
+    const objParams = getProducts(selectionCategory.id);
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
         errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
@@ -59,8 +75,8 @@ const Products = () => {
       }
     });
   };
-  const onSelectUnits = (name) => {
-    setSelUnits(units.find((un) => un.name === name));
+  const onSelectUnits = (selectUnit) => {
+    setSelUnits(selectUnit);
   };
   const findProducts = () => {
     if (productName !== "") {
@@ -69,7 +85,13 @@ const Products = () => {
         .map((pr, i) => <span key={i}>{pr}</span>);
     }
   };
-
+  
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDownHandler);
+    return () => {
+      window.removeEventListener("keydown", onKeyDownHandler);
+    };
+  }, [onKeyDownHandler]);
   useEffect(() => {
     let objParams = getUnits();
     restRequest(objParams)
@@ -96,9 +118,7 @@ const Products = () => {
         console.log("error", err);
       });
   }, []);
-
-  const disableAddButton = productName !== "" && selCategory && selCategory?.name !== "" && selUnits && selUnits?.name !== "";
-
+  
   return (
     <div className={style.wrapper}>
       <h2>ДОБАВЛЕНИЕ</h2>
@@ -133,7 +153,7 @@ const Products = () => {
           <div className={style.findContainer}>{findProducts()}</div>
         </div>
 
-        <Button title="добавить" clickCallBack={onClickButtonAdd} disable={disableAddButton} />
+        <Button title="добавить" clickCallBack={onClickButtonAdd} disable={getDisableButton()} />
       </div>
       <ModalSelectCategory
         isOpen={modalSelectOpen}
