@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji,react-hooks/exhaustive-deps */
-import React, {createRef, useCallback, useEffect, useState} from "react";
+import React, { createRef, useCallback, useEffect, useState } from "react";
 import style from "./AddCredit.module.scss";
 import Button from "../../components/Button";
 import getCategories from "../../queries/getCategories";
@@ -9,6 +9,7 @@ import ModalInfo from "../../components/ModalInfo";
 import ModalSelectCategory from "../Products/components/ModalSelectCategory";
 import getUnits from "../../queries/getUnits";
 import addPurchases from "../../queries/addPurchases";
+import { customEventProducts } from "../../utils/constans";
 
 const AddCredit = () => {
   const [modalSelectOpen, setModalSelectOpen] = useState(false);
@@ -32,6 +33,7 @@ const AddCredit = () => {
         console.log(products);
         setProducts(products);
         setSelCategory(selectCategory);
+        setSelProduct(null);
       })
       .catch(() => {});
   };
@@ -65,21 +67,24 @@ const AddCredit = () => {
   const getDisableButton = () => {
     return selProduct && selCategory && quantity !== "" && price !== "";
   };
-  const onKeyDownHandler = useCallback ((e) => {
-    // console.log(e.which);
-    // alert(e.which);
-    const { which } = e;
-    switch (which) {
-      case 13:
-        document.activeElement.blur()
-        if (getDisableButton()) {
-          onClickButtonUpdate();
-        }
-        break;
-      default:
-        break;
-    }
-  }, [selProduct, selCategory, quantity, price])
+  const onKeyDownHandler = useCallback(
+    (e) => {
+      // console.log(e.which);
+      // alert(e.which);
+      const { which } = e;
+      switch (which) {
+        case 13:
+          document.activeElement.blur();
+          if (getDisableButton()) {
+            onClickButtonUpdate();
+          }
+          break;
+        default:
+          break;
+      }
+    },
+    [selProduct, selCategory, quantity, price]
+  );
   const onChangePrice = (e) => {
     const prs = e.target.value.replace(",", ".");
     setPrice(prs);
@@ -109,6 +114,20 @@ const AddCredit = () => {
     }
     return "непонятно что";
   };
+
+  const onListenerChangeProducts = useCallback(() => {
+    setSelCategory(null);
+    setSelProduct(null);
+    setSelDate(getCurrentDate());
+    setPrice("");
+    setQuantity("");
+    setMessageModal(
+      "Кто-то добавил в базу новый вид продукта"
+    );
+    setInfoModal(true);
+    setSuccessModal(true);
+    
+  }, [infoModal, successModal, messageModal])
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDownHandler);
@@ -143,6 +162,10 @@ const AddCredit = () => {
         setSuccessModal(false);
         console.log("error", err);
       });
+    window.addEventListener(customEventProducts, onListenerChangeProducts);
+    return () => {
+      window.removeEventListener(customEventProducts, onListenerChangeProducts);
+    };
   }, []);
 
   return (
@@ -209,7 +232,7 @@ const AddCredit = () => {
         message={messageModal}
         success={successModal}
         closeModalInfo={setInfoModal}
-        duration={7000}
+        duration={2000}
       />
     </div>
   );

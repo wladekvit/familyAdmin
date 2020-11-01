@@ -12,8 +12,10 @@ import addCategories from "../../queries/addCategories";
 import editCategories from "../../queries/editCategory";
 import ModalInfo from "../../components/ModalInfo";
 import {errorProcessing} from "../../utils/initialisation";
+import {customEventCategory} from "../../utils/constans";
 
 const Categories = () => {
+  
   const [categories, setCategories] = useState([]);
   const [currentName, setCurrentName] = useState("");
   const [openModalAddCat, setOpenModalAddCat] = useState(false);
@@ -31,9 +33,6 @@ const Categories = () => {
       } else {
         data.sort((a, b) => (a.name > b.name ? 1 : -1));
         setCategories(data);
-        if (openModalDelCat) {
-          setOpenModalDelCat(false);
-        }
         console.log(data);
       }
     });
@@ -48,7 +47,7 @@ const Categories = () => {
         setMessageModal(`Успех!!! Категория ${name.toUpperCase()} добавлена в базу 😊`);
         setInfoModal(true);
         setSuccessModal(true);
-        onClickGetCategories();
+        // onClickGetCategories();
       }
     });
     setOpenModalAddCat(false);
@@ -68,7 +67,10 @@ const Categories = () => {
         setMessageModal(`Успех!!! Название категории удалено из базы 😴`);
         setInfoModal(true);
         setSuccessModal(true);
-        onClickGetCategories();
+        if (openModalDelCat) {
+          setOpenModalDelCat(false);
+        }
+        // onClickGetCategories();
       }
     });
   };
@@ -91,7 +93,7 @@ const Categories = () => {
         setMessageModal(`Успех!!! Название категории изменено в базе`);
         setInfoModal(true);
         setSuccessModal(true);
-        onClickGetCategories();
+        // onClickGetCategories();
       }
     });
     
@@ -102,9 +104,19 @@ const Categories = () => {
     setOpenModalDelCat(true);
   };
   
+  const onListenerChangeCategories = () => {
+    // console.log("onListenerChangeCategories");
+    onClickGetCategories()
+  };
+  
   useEffect(() => {
     if (categories.length === 0) {
       onClickGetCategories();
+    }
+    
+    window.addEventListener(customEventCategory, onListenerChangeCategories);
+    return function () {
+      window.removeEventListener(customEventCategory, onListenerChangeCategories);
     }
   }, []);
   
