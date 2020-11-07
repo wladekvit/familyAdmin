@@ -5,13 +5,15 @@ import Categories from "./Categories";
 import AddDebit from "./AddDebit";
 import AddCredit from "./AddCredit";
 import Products from "./Products";
+import ViewPurchases from "./ViewPurchases";
 
 export const routes = {
   home: "/",
   categories: "/categories",
   addCredit: "/credit",
   addDebit: "/debit",
-  products: "/prod"
+  products: "/prod",
+  purchases: "/purchases"
 };
 
 export const Router = () => {
@@ -22,6 +24,7 @@ export const Router = () => {
       <Route path={routes.addDebit} component={AddDebit} />
       <Route path={routes.addCredit} component={AddCredit} />
       <Route path={routes.products} component={Products} />
+      <Route path={routes.purchases} component={ViewPurchases} />
     </Switch>
   );
 };

@@ -10,6 +10,7 @@
   --width-info-rev: -300px;
   --item--bc: #5c615e;
   --secondary: #585569;
+  --dark--back: #212025;
 
   //TEXT
   --title-size: 14px;
@@ -28,7 +29,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #212025;
+  background-color: var(--dark--back);
 
   ::-webkit-scrollbar-thumb {
     -webkit-border-radius:4px;

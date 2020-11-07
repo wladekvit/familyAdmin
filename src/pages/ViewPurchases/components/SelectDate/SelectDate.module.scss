@@ -1,0 +1,21 @@
+@import "../../../../style/mixins";
+.wrapper {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    @include inputWrapper;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  span {
+    @include spanFromInput;
+  }
+}

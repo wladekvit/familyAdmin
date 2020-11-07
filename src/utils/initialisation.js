@@ -45,3 +45,15 @@ export const onSelectCategoryUtility = (
     });
   });
 };
+
+export const getCurrentDate = (selectionDate) => {
+  //format: 2012-06-01
+  const date = selectionDate ? new Date(selectionDate) : new Date();
+  let day = date.getDate().toString();
+  if (day.length === 1) day = `0${day}`;
+  let mouth = (date.getMonth() + 1).toString();
+  if (mouth.length === 1) mouth = `0${mouth}`;
+  const year = date.getFullYear();
+
+  return `${year}-${mouth}-${day}`;
+};

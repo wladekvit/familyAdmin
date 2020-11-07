@@ -31,7 +31,7 @@ const Categories = () => {
       if (data && data.hasOwnProperty("error")) {
         errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
       } else {
-        data.sort((a, b) => (a.name > b.name ? 1 : -1));
+        data.sort((a, b) => (a.category > b.category ? 1 : -1));
         setCategories(data);
         console.log(data);
       }
@@ -54,7 +54,7 @@ const Categories = () => {
   };
   
   const delCategories = (name) => {
-    const findCat = categories.find((cat) => name === cat.name);
+    const findCat = categories.find((cat) => name === cat.category);
     const objParams = removeCategories(findCat.id);
     restRequest(objParams).then((data) => {
       console.log(data);
@@ -79,7 +79,7 @@ const Categories = () => {
     
     const oN = oldName.trim().toLowerCase();
     const nN = newName.trim().toLowerCase();
-    const findCat = categories.find((cat) => oldName === cat.name);
+    const findCat = categories.find((cat) => oldName === cat.category);
     
     if (nN === "" || nN === oN) {
       return;
@@ -131,7 +131,7 @@ const Categories = () => {
           {categories.map((category) => (
             <ItemCategories
               key={category.id}
-              name={category.name}
+              name={category.category}
               onRemoveCategories={setCurrentNameCategory}
               onEditCategories={editCategory}
             />

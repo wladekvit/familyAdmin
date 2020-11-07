@@ -14,11 +14,14 @@ const ModalSelectCategory = ({ isOpen, closeOpen, onSelectCategories, categories
   return (
     <Modal isOpen={isOpen} onRequestClose={() => closeOpen(false)} title="Список категорий‍">
       <div className={style.modalAddCat}>
-        {categories.map((cat, i) => (
-          <div key={i} className={style.itemCat} onClick={selCategories} data-id={cat.id}>
-            <span>{cat.name}</span>
-          </div>
-        ))}
+        {categories.map((cat, i) => {
+          const field = Object.keys(cat)[1];
+          return (
+            <div key={i} className={style.itemCat} onClick={selCategories} data-id={cat.id}>
+              <span>{cat[field]}</span>
+            </div>
+          );
+        })}
       </div>
     </Modal>
   );

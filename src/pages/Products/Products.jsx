@@ -29,7 +29,7 @@ const Products = () => {
     setProductName(e.target.value.toLowerCase());
   };
   const getDisableButton = () => {
-    return productName !== "" && selCategory && selCategory?.name !== "" && selUnits && selUnits?.name !== "";
+    return productName !== "" && selCategory && selCategory?.category !== "" && selUnits && selUnits?.unit !== "";
   };
   const onKeyDownHandler = useCallback ((e) => {
     // console.log(e.which);
@@ -105,7 +105,7 @@ const Products = () => {
             if (data && data.hasOwnProperty("error")) {
               errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
             } else {
-              data.sort((a, b) => (a.name > b.name ? 1 : -1));
+              data.sort((a, b) => (a.category > b.category ? 1 : -1));
               setCategories(data);
             }
           });
@@ -132,7 +132,7 @@ const Products = () => {
             type="text"
             placeholder="🖋 тут выбери категорию"
             onClick={() => setModalSelectOpen(true)}
-            value={selCategory?.name || ""}
+            value={selCategory?.category || ""}
             readOnly={true}
           />
           <span>Вбери единицу измерения ⚖</span>
@@ -140,7 +140,7 @@ const Products = () => {
             type="text"
             placeholder="🖋 тут выбери ед. измерения"
             onClick={() => setModalUnitsOpen(true)}
-            value={selUnits?.name || ""}
+            value={selUnits?.unit || ""}
             readOnly={true}
           />
           <span>Название продукта 🍎 🥼 🔨</span>

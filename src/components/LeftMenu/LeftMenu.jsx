@@ -50,8 +50,15 @@ const LeftMenu = () => {
           />
           <ItemMenu
             nameIcon="itemMenu"
-            title="Расходы"
+            title="внести расходы"
             path={routes.addCredit}
+            clickItemMenu={clickItemLinc}
+            currentPath={currentPath}
+          />
+          <ItemMenu
+            nameIcon="itemMenu"
+            title="посмотреть расходы"
+            path={routes.purchases}
             clickItemMenu={clickItemLinc}
             currentPath={currentPath}
           />

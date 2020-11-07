@@ -26,7 +26,6 @@ function App() {
         window.dispatchEvent(new CustomEvent(customEventCategory));
       });
     } else if (products.findIndex((ob) => response.data === ob) !== -1) {
-      // changeCategory(Math.floor(Math.random() * Math.floor(100)));
       window.dispatchEvent(new CustomEvent(customEventProducts));
     }
   };

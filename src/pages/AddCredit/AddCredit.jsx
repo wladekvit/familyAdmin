@@ -4,7 +4,7 @@ import style from "./AddCredit.module.scss";
 import Button from "../../components/Button";
 import getCategories from "../../queries/getCategories";
 import { restRequest } from "../../utils/restRequest";
-import { errorProcessing, onSelectCategoryUtility } from "../../utils/initialisation";
+import { errorProcessing, getCurrentDate, onSelectCategoryUtility } from "../../utils/initialisation";
 import ModalInfo from "../../components/ModalInfo";
 import ModalSelectCategory from "../Products/components/ModalSelectCategory";
 import getUnits from "../../queries/getUnits";
@@ -93,24 +93,13 @@ const AddCredit = () => {
     const prs = e.target.value.replace(",", ".");
     setQuantity(prs);
   };
-  const getCurrentDate = (selectionDate) => {
-    //format: 2012-06-01
-    const date = selectionDate ? new Date(selectionDate) : new Date();
-    let day = date.getDate().toString();
-    if (day.length === 1) day = `0${day}`;
-    let mouth = (date.getMonth() + 1).toString();
-    if (mouth.length === 1) mouth = `0${mouth}`;
-    const year = date.getFullYear();
-
-    return `${year}-${mouth}-${day}`;
-  };
   const onChangeDate = (e) => {
     setSelDate(getCurrentDate(e.target.value));
   };
   const getUnitProduct = () => {
     if (selProduct) {
       const un = units.find((u) => u.id === +selProduct.unit);
-      return un.name;
+      return un.unit;
     }
     return "непонятно что";
   };
@@ -149,7 +138,7 @@ const AddCredit = () => {
             if (data && data.hasOwnProperty("error")) {
               errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
             } else {
-              data.sort((a, b) => (a.name > b.name ? 1 : -1));
+              data.sort((a, b) => (a.category > b.category ? 1 : -1));
               setCategories(data);
               setSelDate(getCurrentDate());
             }
@@ -181,7 +170,7 @@ const AddCredit = () => {
             type="text"
             placeholder="🖋 тут выбери категорию"
             onClick={() => setModalSelectOpen(true)}
-            value={selCategory?.name || ""}
+            value={selCategory?.category || ""}
             readOnly={true}
           />
           <span>Выбери то что купил 🧾</span>
