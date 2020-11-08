@@ -14,6 +14,8 @@ import updatePurchases from "../../queries/updatePurchases";
 import getPurchasesByDate from "../../queries/getPurchasesByDate";
 import SelectPeriod from "./components/SelectPeriod";
 import getPurchasesByPeriod from "../../queries/getPurchasesByPeriod";
+import SelectName from "./components/SelectName";
+import getPurchasesByName from "../../queries/getPurchasesByName";
 
 const StatusCheck = {
   all: 1,
@@ -25,14 +27,15 @@ const StatusCheck = {
 const ViewPurchases = () => {
   //info modal
   const [infoModal, setInfoModal] = useState(false);
-  const [messageModal, setMessageModal] = useState("");
-  const [successModal, setSuccessModal] = useState(true);
+  const [, setMessageModal] = useState("");
+  const [, setSuccessModal] = useState(true);
 
   const [statusCheck, setStatusCheck] = useState(StatusCheck.all);
   const [itemsData, setItemsData] = useState([]);
   const [selectDate, setSelectDate] = useState(getCurrentDate());
   const [selDateFrom, setSelDateFrom] = useState("");
   const [selDateTo, setSelDateTo] = useState("");
+  const [selProduct, setSelProduct] = useState({});
 
   const onClickButtonLoad = () => {
     switch (statusCheck) {
@@ -40,16 +43,18 @@ const ViewPurchases = () => {
         getDataByDate().then();
         break;
       case StatusCheck.byPeriod:
-        getDataByPeriod();
+        getDataByPeriod().then();
         break;
       case StatusCheck.all:
         getDataByAll().then();
+        break;
+      case StatusCheck.byName:
+        getDataByName().then();
         break;
       default:
         break;
     }
   };
-
   const getCurrentDateFromTo = () => {
     const from = new Date();
     from.setDate(1);
@@ -60,7 +65,6 @@ const ViewPurchases = () => {
     setSelDateFrom(getCurrentDate(from));
     setSelDateTo(getCurrentDate(to));
   };
-
   const getDataByAll = async () => {
     try {
       const objParams = getPurchases();
@@ -76,7 +80,6 @@ const ViewPurchases = () => {
       setItemsData([]);
     }
   };
-
   const getDataByDate = async () => {
     try {
       const objParams = getPurchasesByDate(selectDate);
@@ -93,7 +96,6 @@ const ViewPurchases = () => {
       setItemsData([]);
     }
   };
-
   const getDataByPeriod = async () => {
     try {
       const objParams = getPurchasesByPeriod(selDateFrom, selDateTo);
@@ -109,9 +111,24 @@ const ViewPurchases = () => {
       errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
       setItemsData([]);
     }
-
   };
-
+  const getDataByName = async () => {
+    console.log(selProduct);
+    try {
+      const objParams = getPurchasesByName(selProduct._id);
+      const purchases = await restRequest(objParams);
+      console.log(purchases);
+      if (purchases && purchases.hasOwnProperty("error")) {
+        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setItemsData([]);
+      } else {
+        setItemsData(purchases);
+      }
+    } catch (e) {
+      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setItemsData([]);
+    }
+  };
   const removeItemPurchases = async (purchaseID) => {
     try {
       const objParams = deletePurchases(purchaseID);
@@ -126,7 +143,6 @@ const ViewPurchases = () => {
       setItemsData([]);
     }
   };
-
   const updateItemPurchases = async (purchaseID, newPrice, newQuantity) => {
     try {
       const objParams = updatePurchases(purchaseID, newPrice, newQuantity);
@@ -141,7 +157,6 @@ const ViewPurchases = () => {
       setItemsData([]);
     }
   };
-
   const getFunctionFroLoadData = () => {
     if (itemsData) {
       return itemsData.map((item, index) => (
@@ -155,7 +170,6 @@ const ViewPurchases = () => {
     }
     return null;
   };
-
   const getSumPrice = () => {
     const initialValue = 0;
     const sum = itemsData.reduce(function (accumulator, currentValue) {
@@ -163,12 +177,14 @@ const ViewPurchases = () => {
     }, initialValue);
     return sum.toFixed(2);
   };
-
   const onChangeStatus = (status) => {
+    if (statusCheck === StatusCheck.byName) {
+      setSelProduct({});
+    }
     setStatusCheck(status);
     setItemsData([]);
-  };
 
+  };
   useEffect(() => {
     getCurrentDateFromTo();
   }, []);
@@ -193,7 +209,7 @@ const ViewPurchases = () => {
             <Icon name="radioButton" check={statusCheck === StatusCheck.byPeriod} />
           </div>
           <div className={style.itemInfo} onClick={() => onChangeStatus(StatusCheck.byName)}>
-            <span>по имени</span>
+            <span>по товару</span>
             <Icon name="radioButton" check={statusCheck === StatusCheck.byName} />
           </div>
           <div className={style.itemInfo + " " + style.itemInfoSum}>
@@ -203,7 +219,15 @@ const ViewPurchases = () => {
         <div className={style.infoCredit}>
           {statusCheck === StatusCheck.byDate && <SelectDate onSelectDate={setSelectDate} />}
           {statusCheck === StatusCheck.byPeriod && (
-            <SelectPeriod dateFrom={selDateFrom} dateTo={selDateTo} setDateFrom={setSelDateFrom} setDateTo={setSelDateTo} />
+            <SelectPeriod
+              dateFrom={selDateFrom}
+              dateTo={selDateTo}
+              setDateFrom={setSelDateFrom}
+              setDateTo={setSelDateTo}
+            />
+          )}
+          {statusCheck === StatusCheck.byName && (
+            <SelectName productDefault={selProduct} setProductDefault={setSelProduct} />
           )}
           <div className={style.containerData}>{getFunctionFroLoadData()}</div>
         </div>
