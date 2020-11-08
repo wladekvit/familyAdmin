@@ -12,6 +12,8 @@ import getPurchases from "../../queries/getPurchasesAll";
 import deletePurchases from "../../queries/deletePurchases";
 import updatePurchases from "../../queries/updatePurchases";
 import getPurchasesByDate from "../../queries/getPurchasesByDate";
+import SelectPeriod from "./components/SelectPeriod";
+import getPurchasesByPeriod from "../../queries/getPurchasesByPeriod";
 
 const StatusCheck = {
   all: 1,
@@ -29,7 +31,8 @@ const ViewPurchases = () => {
   const [statusCheck, setStatusCheck] = useState(StatusCheck.all);
   const [itemsData, setItemsData] = useState([]);
   const [selectDate, setSelectDate] = useState(getCurrentDate());
-  const [summa, setSumma] = useState(0);
+  const [selDateFrom, setSelDateFrom] = useState("");
+  const [selDateTo, setSelDateTo] = useState("");
 
   const onClickButtonLoad = () => {
     switch (statusCheck) {
@@ -45,6 +48,17 @@ const ViewPurchases = () => {
       default:
         break;
     }
+  };
+
+  const getCurrentDateFromTo = () => {
+    const from = new Date();
+    from.setDate(1);
+    const to = new Date();
+    to.setMonth(to.getMonth() + 1, 1);
+    to.setDate(to.getDate() - 1);
+
+    setSelDateFrom(getCurrentDate(from));
+    setSelDateTo(getCurrentDate(to));
   };
 
   const getDataByAll = async () => {
@@ -80,8 +94,22 @@ const ViewPurchases = () => {
     }
   };
 
-  const getDataByPeriod = () => {
-    setItemsData([]);
+  const getDataByPeriod = async () => {
+    try {
+      const objParams = getPurchasesByPeriod(selDateFrom, selDateTo);
+      const purchases = await restRequest(objParams);
+      console.log(purchases);
+      if (purchases && purchases.hasOwnProperty("error")) {
+        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setItemsData([]);
+      } else {
+        setItemsData(purchases);
+      }
+    } catch (e) {
+      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setItemsData([]);
+    }
+
   };
 
   const removeItemPurchases = async (purchaseID) => {
@@ -141,7 +169,9 @@ const ViewPurchases = () => {
     setItemsData([]);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getCurrentDateFromTo();
+  }, []);
 
   return (
     <div className={style.wrapper}>
@@ -172,6 +202,9 @@ const ViewPurchases = () => {
         </div>
         <div className={style.infoCredit}>
           {statusCheck === StatusCheck.byDate && <SelectDate onSelectDate={setSelectDate} />}
+          {statusCheck === StatusCheck.byPeriod && (
+            <SelectPeriod dateFrom={selDateFrom} dateTo={selDateTo} setDateFrom={setSelDateFrom} setDateTo={setSelDateTo} />
+          )}
           <div className={style.containerData}>{getFunctionFroLoadData()}</div>
         </div>
         <Button
