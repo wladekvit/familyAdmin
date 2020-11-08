@@ -47,7 +47,7 @@ const Products = () => {
     }
   }, [productName, selCategory, selUnits])
   const onClickButtonAdd = () => {
-    const objParams = addProducts(productName, selCategory.id, selUnits.id);
+    const objParams = addProducts(productName, selCategory._id, selUnits._id);
     setProductName("");
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
@@ -64,7 +64,7 @@ const Products = () => {
   };
   const onSelectCategory = (selectionCategory) => {
     setSelCategory(selectionCategory);
-    const objParams = getProducts(selectionCategory.id);
+    const objParams = getProducts(selectionCategory._id);
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
         errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);

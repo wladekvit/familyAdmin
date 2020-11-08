@@ -9,6 +9,9 @@ import ItemsData from "./components/ItemsData";
 import { errorProcessing, getCurrentDate } from "../../utils/initialisation";
 import { restRequest } from "../../utils/restRequest";
 import getPurchases from "../../queries/getPurchasesAll";
+import deletePurchases from "../../queries/deletePurchases";
+import updatePurchases from "../../queries/updatePurchases";
+import getPurchasesByDate from "../../queries/getPurchasesByDate";
 
 const StatusCheck = {
   all: 1,
@@ -47,6 +50,23 @@ const ViewPurchases = () => {
     try {
       const objParams = getPurchases();
       const purchases = await restRequest(objParams);
+      if (purchases && purchases.hasOwnProperty("error")) {
+        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setItemsData([]);
+      } else {
+        setItemsData(purchases);
+      }
+    } catch (e) {
+      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setItemsData([]);
+    }
+  };
+
+  const getDataByDate = async () => {
+    console.log(selectDate);
+    try {
+      const objParams = getPurchasesByDate(selectDate);
+      const purchases = await restRequest(objParams);
       console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {
         errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
@@ -60,12 +80,38 @@ const ViewPurchases = () => {
     }
   };
 
-  const getDataByDate = () => {
+  const getDataByPeriod = () => {
     setItemsData([]);
   };
 
-  const getDataByPeriod = () => {
-    setItemsData([]);
+  const removeItemPurchases = async (purchaseID) => {
+    try {
+      const objParams = deletePurchases(purchaseID);
+      const purchases = await restRequest(objParams);
+      if (purchases && purchases.hasOwnProperty("error")) {
+        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+      } else {
+        onClickButtonLoad();
+      }
+    } catch (e) {
+      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setItemsData([]);
+    }
+  };
+
+  const updateItemPurchases = async (purchaseID, newPrice, newQuantity) => {
+    try {
+      const objParams = updatePurchases(purchaseID, newPrice, newQuantity);
+      const purchases = await restRequest(objParams);
+      if (purchases && purchases.hasOwnProperty("error")) {
+        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+      } else {
+        onClickButtonLoad();
+      }
+    } catch (e) {
+      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setItemsData([]);
+    }
   };
 
   const getFunctionFroLoadData = () => {
@@ -73,6 +119,8 @@ const ViewPurchases = () => {
       return itemsData.map((item, index) => (
         <ItemsData
           key={index}
+          onDelete={removeItemPurchases}
+          onUpdate={updateItemPurchases}
           {...item}
         />
       ));

@@ -33,7 +33,7 @@ export const onSelectCategoryUtility = (
   setSuccessModal
 ) => {
   return new Promise((resolve, reject) => {
-    const objParams = getProducts(selectCategory.id);
+    const objParams = getProducts(selectCategory._id);
     restRequest(objParams).then((products) => {
       if (products && products.hasOwnProperty("error")) {
         errorProcessing(products.error, setMessageModal, setInfoModal, setSuccessModal);

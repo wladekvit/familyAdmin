@@ -55,7 +55,7 @@ const Categories = () => {
   
   const delCategories = (name) => {
     const findCat = categories.find((cat) => name === cat.category);
-    const objParams = removeCategories(findCat.id);
+    const objParams = removeCategories(findCat._id);
     restRequest(objParams).then((data) => {
       console.log(data);
       if (data && data.hasOwnProperty("error")) {
@@ -84,7 +84,7 @@ const Categories = () => {
     if (nN === "" || nN === oN) {
       return;
     }
-    const objParams = editCategories(findCat.id, newName.toLowerCase());
+    const objParams = editCategories(findCat._id, newName.toLowerCase());
     restRequest(objParams).then((data) => {
       console.log(data);
       if (data && data.hasOwnProperty("error")) {
@@ -130,7 +130,7 @@ const Categories = () => {
         <div className={style.listCategories}>
           {categories.map((category) => (
             <ItemCategories
-              key={category.id}
+              key={category._id}
               name={category.category}
               onRemoveCategories={setCurrentNameCategory}
               onEditCategories={editCategory}
