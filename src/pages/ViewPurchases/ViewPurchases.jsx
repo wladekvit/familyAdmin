@@ -29,11 +29,12 @@ const ViewPurchases = () => {
   const [statusCheck, setStatusCheck] = useState(StatusCheck.all);
   const [itemsData, setItemsData] = useState([]);
   const [selectDate, setSelectDate] = useState(getCurrentDate());
+  const [summa, setSumma] = useState(0);
 
   const onClickButtonLoad = () => {
     switch (statusCheck) {
       case StatusCheck.byDate:
-        getDataByDate();
+        getDataByDate().then();
         break;
       case StatusCheck.byPeriod:
         getDataByPeriod();
@@ -63,7 +64,6 @@ const ViewPurchases = () => {
   };
 
   const getDataByDate = async () => {
-    console.log(selectDate);
     try {
       const objParams = getPurchasesByDate(selectDate);
       const purchases = await restRequest(objParams);
@@ -128,6 +128,14 @@ const ViewPurchases = () => {
     return null;
   };
 
+  const getSumPrice = () => {
+    const initialValue = 0;
+    const sum = itemsData.reduce(function (accumulator, currentValue) {
+      return accumulator + currentValue.price;
+    }, initialValue);
+    return sum.toFixed(2);
+  };
+
   const onChangeStatus = (status) => {
     setStatusCheck(status);
     setItemsData([]);
@@ -158,12 +166,19 @@ const ViewPurchases = () => {
             <span>по имени</span>
             <Icon name="radioButton" check={statusCheck === StatusCheck.byName} />
           </div>
+          <div className={style.itemInfo + " " + style.itemInfoSum}>
+            <span>{getSumPrice()}</span>
+          </div>
         </div>
         <div className={style.infoCredit}>
           {statusCheck === StatusCheck.byDate && <SelectDate onSelectDate={setSelectDate} />}
           <div className={style.containerData}>{getFunctionFroLoadData()}</div>
         </div>
-        <Button title="загрузить" clickCallBack={onClickButtonLoad} className={style.customButton} />
+        <Button
+          title="загрузить"
+          clickCallBack={onClickButtonLoad}
+          className={style.customButton}
+        />
         <ModalInfo
           isOpen={infoModal}
           message="Всем привет дорогие. Это ТЕСТ!!!"

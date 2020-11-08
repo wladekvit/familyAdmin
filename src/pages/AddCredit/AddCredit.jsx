@@ -107,7 +107,7 @@ const AddCredit = () => {
   const onListenerChangeProducts = useCallback(() => {
     setSelCategory(null);
     setSelProduct(null);
-    setSelDate(getCurrentDate());
+    // setSelDate(getCurrentDate());
     setPrice("");
     setQuantity("");
     setMessageModal(
