@@ -121,7 +121,6 @@ const Products = () => {
   
   return (
     <div className={style.wrapper}>
-      <h2>ДОБАВЛЕНИЕ</h2>
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <span>добавить название продукта, товара, услуги</span>
@@ -152,8 +151,9 @@ const Products = () => {
           />
           <div className={style.findContainer}>{findProducts()}</div>
         </div>
-
-        <Button title="добавить" clickCallBack={onClickButtonAdd} disable={getDisableButton()} />
+        <div className={style.infoFooter}>
+          <Button title="добавить" clickCallBack={onClickButtonAdd} disable={getDisableButton()} />
+        </div>
       </div>
       <ModalSelectCategory
         isOpen={modalSelectOpen}

@@ -3,22 +3,24 @@
 $widthWrapper: 320px;
 .wrapper {
   @include wrapperPages;
+  @include aloneCenterPosition;
   text-align: center;
 
   .container_sections {
-    width: fit-content;
-    height: fit-content;
-    padding: 10px;
-    background-color: #48474F;
+    width: 90%;
+    max-width: 450px;
+    height: 90%;
+    max-height: 390px;
+    display: grid;
+    grid-template-rows: 60px 1fr 60px;
+    grid-gap: 4px;
+    padding: 5px;
+    background-color: var(--border);
     border-radius: 10px;
-    margin: 20px auto;
 
     .infoTitle {
       @include aloneCenterPosition;
-      width: $widthWrapper;
-      height: 70px;
-      margin: 0 auto 10px auto;
-      background-color: #37363E;
+      background-color: var(--bg-main);
       border-radius: 10px;
       text-transform: uppercase;
       color: var(--color-text);
@@ -31,13 +33,11 @@ $widthWrapper: 320px;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      width: $widthWrapper;
-      height: 300px;
-      margin: 0 auto 10px auto;
-      background-color: #37363E;
+      background-color: var(--bg-main);
       border-radius: 10px;
       color: var(--color-text);
       text-align: left;
+      overflow: auto;
 
       span {
         width: 94%;
@@ -51,7 +51,7 @@ $widthWrapper: 320px;
         width: 90%;
         border: 0;
         border-radius: 6px;
-        height: 40px;
+        min-height: 40px;
         background-color: var(--input-background);
         padding: 0 10px;
         font-size: 18px;
@@ -82,6 +82,12 @@ $widthWrapper: 320px;
         }
 
       }
+    }
+
+    .infoFooter {
+      @include aloneCenterPosition;
+      background-color: var(--bg-main);
+      border-radius: 10px;
     }
   }
 
