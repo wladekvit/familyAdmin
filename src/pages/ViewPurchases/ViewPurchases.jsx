@@ -231,11 +231,14 @@ const ViewPurchases = () => {
           )}
           <div className={style.containerData}>{getFunctionFroLoadData()}</div>
         </div>
-        <Button
-          title="загрузить"
-          clickCallBack={onClickButtonLoad}
-          className={style.customButton}
-        />
+        <div className={style.infoFooter}>
+          <Button
+            title="загрузить"
+            clickCallBack={onClickButtonLoad}
+            className={style.customButton}
+          />
+        </div>
+
         <ModalInfo
           isOpen={infoModal}
           message="Всем привет дорогие. Это ТЕСТ!!!"
