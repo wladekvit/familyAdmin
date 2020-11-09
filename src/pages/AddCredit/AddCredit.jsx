@@ -159,7 +159,6 @@ const AddCredit = () => {
 
   return (
     <div className={style.wrapper} ref={containerRef}>
-      <h2>Расход средств</h2>
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <span>что купил то внеси 🤠</span>
@@ -198,11 +197,14 @@ const AddCredit = () => {
           <span>Когда купил 🏧</span>
           <input type="date" defaultValue={selDate} onChange={onChangeDate} />
         </div>
-        <Button
-          title="добавить покупку"
-          clickCallBack={onClickButtonUpdate}
-          disable={getDisableButton()}
-        />
+        <div className={style.infoFooter}>
+          <Button
+            title="добавить покупку"
+            clickCallBack={onClickButtonUpdate}
+            disable={getDisableButton()}
+          />
+        </div>
+
       </div>
       <ModalSelectCategory
         isOpen={modalSelectOpen}
