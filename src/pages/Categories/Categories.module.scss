@@ -3,21 +3,23 @@
 .wrapper {
   user-select: none;
   @include wrapperPages;
+  @include aloneCenterPosition;
   text-align: center;
+
   .container_sections {
-    width: fit-content;
-    height: fit-content;
-    padding: 10px;
+    width: 95%;
+    max-width: 600px;
+    height: 85%;
+    display: grid;
+    grid-template-rows: 50px 1fr 60px;
+    grid-gap: 4px;
     background-color: #48474F;
     border-radius: 10px;
-    margin: 20px auto;
+    padding: 4px;
 
 
     .infoTitle {
       @include aloneCenterPosition;
-      width: var(--width-info);
-      height: 40px;
-      margin: 0 auto 10px auto;
       background-color: #37363E;
       border-radius: 10px;
       text-transform: uppercase;
@@ -25,9 +27,6 @@
     }
 
     .listCategories {
-      width: var(--width-info);
-      height: 360px;
-      margin: 0 auto 10px auto;
       padding-top: 5px;
       background-color: #37363E;
       border-radius: 10px;
@@ -35,6 +34,12 @@
       font-style: italic;
       color: var(--color-text);
       overflow-y: auto;
+    }
+
+    .buttonContainer {
+      @include aloneCenterPosition;
+      background-color: #37363E;
+      border-radius: 10px;
     }
   }
 

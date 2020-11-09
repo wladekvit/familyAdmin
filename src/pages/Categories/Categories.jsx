@@ -122,7 +122,7 @@ const Categories = () => {
   
   return (
     <div className={style.wrapper}>
-      <h2>Категории</h2>
+
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <span>список категорий</span>
@@ -137,12 +137,13 @@ const Categories = () => {
             />
           ))}
         </div>
-        {/*<Button title="обновить" clickCallBack={onClickGetCategories}/>*/}
-        <Button
-          title="добавить категорию 👍"
-          clickCallBack={() => setOpenModalAddCat(true)}
-          className={style.buttonTopMargin}
-        />
+        <div className={style.buttonContainer}>
+          <Button
+            title="добавить категорию 👍"
+            clickCallBack={() => setOpenModalAddCat(true)}
+          />
+        </div>
+
       </div>
       <ModalAddCategories
         isOpen={openModalAddCat}
