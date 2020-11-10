@@ -1,8 +1,10 @@
 .modalAddCat {
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  width: 280px;
-  max-height: 280px;
+  width: 80vw;
+  max-width: 500px;
+  height: calc(80vh - 70px);
+  max-height: 420px;
   padding-top: 20px;
   padding-bottom: 10px;
   overflow-y: auto;
@@ -11,7 +13,8 @@
     cursor: pointer;
     user-select: none;
     width: 95%;
-    height: 35px;
+    height: 5vh;
+    min-height: 40px;
     border-radius: 6px;
     display: flex;
     justify-content: left;
