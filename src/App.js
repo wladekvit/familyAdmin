@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.scss";
 import LeftMenu from "./components/LeftMenu";
 import { Router } from "./pages/router";
@@ -6,8 +6,15 @@ import { BrowserRouter } from "react-router-dom";
 import { customEventCategory, customEventProducts } from "./utils/constans";
 import getCategories from "./queries/getCategories";
 import { restRequest } from "./utils/restRequest";
+import StateContext from "./components/StateContext";
+import { getCurrentDate } from "./utils/initialisation";
 
 function App() {
+  const [selectCurrentDate, setSelectCurrentDate] = useState(getCurrentDate());
+
+  const changeSelectDate = (date) => {
+    setSelectCurrentDate(getCurrentDate(date));
+  }
 
   const openWebSocked = () => {
     console.log("%cOPEN WebSocked", "color: #ff00ff");
@@ -15,7 +22,6 @@ function App() {
   const closeWebSocked = () => {
     console.log("%cClose WebSocked", "color: #ff00ff");
   };
-
   const messageWebSocked = (response) => {
     console.log("%cMessage WebSocked", "color: #ff00ff", response.data);
     const categories = ["insertCategories", "editCategories", "deleteCategories"];
@@ -41,7 +47,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <LeftMenu />
-        <Router />
+        <StateContext.Provider value={{ selectDate: selectCurrentDate, changeSelectDate }}>
+          <Router />
+        </StateContext.Provider>
       </BrowserRouter>
     </div>
   );

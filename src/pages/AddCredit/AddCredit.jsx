@@ -1,17 +1,22 @@
 /* eslint-disable jsx-a11y/accessible-emoji,react-hooks/exhaustive-deps */
-import React, { createRef, useCallback, useEffect, useState } from "react";
+import React, { useRef, useCallback, useContext, useEffect, useState } from "react";
 import style from "./AddCredit.module.scss";
 import Button from "../../components/Button";
 import getCategories from "../../queries/getCategories";
 import { restRequest } from "../../utils/restRequest";
-import { errorProcessing, getCurrentDate, onSelectCategoryUtility } from "../../utils/initialisation";
+import {
+  errorProcessing,
+  onSelectCategoryUtility
+} from "../../utils/initialisation";
 import ModalInfo from "../../components/ModalInfo";
 import ModalSelectCategory from "../Products/components/ModalSelectCategory";
 import getUnits from "../../queries/getUnits";
 import addPurchases from "../../queries/addPurchases";
 import { customEventProducts } from "../../utils/constans";
+import StateContext from "../../components/StateContext";
 
 const AddCredit = () => {
+  const { selectDate, changeSelectDate } = useContext(StateContext);
   const [modalSelectOpen, setModalSelectOpen] = useState(false);
   const [modalProductOpen, setModalProductOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -21,11 +26,9 @@ const AddCredit = () => {
   const [products, setProducts] = useState([]);
   const [selCategory, setSelCategory] = useState(null);
   const [selProduct, setSelProduct] = useState(null);
-  const [selDate, setSelDate] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [units, setUnits] = useState([]);
-  const containerRef = createRef();
 
   const onSelectCategory = (selectCategory) => {
     onSelectCategoryUtility(selectCategory, setMessageModal, setInfoModal, setSuccessModal)
@@ -42,7 +45,7 @@ const AddCredit = () => {
   };
   const onClickButtonUpdate = () => {
     const objParams = addPurchases(
-      selDate,
+      selectDate,
       +selProduct._id,
       +selCategory._id,
       +price,
@@ -94,7 +97,7 @@ const AddCredit = () => {
     setQuantity(prs);
   };
   const onChangeDate = (e) => {
-    setSelDate(getCurrentDate(e.target.value));
+    changeSelectDate(e.target.value);
   };
   const getUnitProduct = () => {
     if (selProduct) {
@@ -107,12 +110,9 @@ const AddCredit = () => {
   const onListenerChangeProducts = useCallback(() => {
     setSelCategory(null);
     setSelProduct(null);
-    // setSelDate(getCurrentDate());
     setPrice("");
     setQuantity("");
-    setMessageModal(
-      "Кто-то добавил в базу новый вид продукта"
-    );
+    setMessageModal("Кто-то добавил в базу новый вид продукта");
     setInfoModal(true);
     setSuccessModal(true);
     
@@ -140,7 +140,7 @@ const AddCredit = () => {
             } else {
               data.sort((a, b) => (a.category > b.category ? 1 : -1));
               setCategories(data);
-              setSelDate(getCurrentDate());
+              // setSelDate(getCurrentDate());
             }
           });
         }
@@ -158,7 +158,7 @@ const AddCredit = () => {
   }, []);
 
   return (
-    <div className={style.wrapper} ref={containerRef}>
+    <div className={style.wrapper}>
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <span>что купил то внеси 🤠</span>
@@ -195,7 +195,7 @@ const AddCredit = () => {
             onChange={onChangeQuantity}
           />
           <span>Когда купил 🏧</span>
-          <input type="date" defaultValue={selDate} onChange={onChangeDate} />
+          <input type="date" defaultValue={selectDate} onChange={onChangeDate} />
         </div>
         <div className={style.infoFooter}>
           <Button
@@ -204,7 +204,6 @@ const AddCredit = () => {
             disable={getDisableButton()}
           />
         </div>
-
       </div>
       <ModalSelectCategory
         isOpen={modalSelectOpen}
