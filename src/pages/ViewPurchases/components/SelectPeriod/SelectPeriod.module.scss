@@ -8,8 +8,10 @@
   align-items: center;
   margin-bottom: 10px;
 
+
   input {
     @include inputWrapper;
+    user-select: none;
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {

@@ -16,6 +16,7 @@ import SelectPeriod from "./components/SelectPeriod";
 import getPurchasesByPeriod from "../../queries/getPurchasesByPeriod";
 import SelectName from "./components/SelectName";
 import getPurchasesByName from "../../queries/getPurchasesByName";
+import { months } from "../../utils/constans";
 
 const StatusCheck = {
   all: 1,
@@ -113,11 +114,11 @@ const ViewPurchases = () => {
     }
   };
   const getDataByName = async () => {
-    console.log(selProduct);
+    // console.log(selProduct);
     try {
-      const objParams = getPurchasesByName(selProduct._id);
+      const objParams = getPurchasesByName(selProduct._id, selDateFrom, selDateTo);
       const purchases = await restRequest(objParams);
-      console.log(purchases);
+      // console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {
         errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
         setItemsData([]);
@@ -175,8 +176,33 @@ const ViewPurchases = () => {
     const sum = itemsData.reduce(function (accumulator, currentValue) {
       return accumulator + currentValue.price;
     }, initialValue);
-    return sum.toFixed(2);
+    return `${ sum.toFixed(2) } грн`;
   };
+  const getSumQuantity = () => {
+    if (statusCheck === StatusCheck.byName && itemsData.length) {
+      const unit = itemsData[0].unit;
+      const initialValue = 0;
+      const sum = itemsData.reduce(function (accumulator, currentValue) {
+        return accumulator + currentValue.quality;
+      }, initialValue);
+      return `${sum} (${unit})`;
+    }
+    return "";
+
+  };
+  const getPeriod = (date) => {
+    let mth = "";
+    let day = "";
+    let year = "";
+    if (selDateTo !== "") {
+      const _date = new Date(date);
+      day = _date.getDate().toString();
+      if (day.length < 2) day = "0" + day;
+      mth = months[_date.getMonth()].shortName;
+      year = _date.getFullYear();
+    }
+    return `${day}-${mth}-${year}`;
+  }
   const onChangeStatus = (status) => {
     if (statusCheck === StatusCheck.byName) {
       setSelProduct({});
@@ -194,7 +220,8 @@ const ViewPurchases = () => {
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <div className={style.headerInfo}>
-            <span>сортировать по</span>
+            <span>{`${getPeriod(selDateFrom)} — ${getPeriod(selDateTo)}`}</span>
+            <span>сортировать по:</span>
           </div>
           <div className={style.itemInfo} onClick={() => onChangeStatus(StatusCheck.all)}>
             <span>все</span>
@@ -214,6 +241,7 @@ const ViewPurchases = () => {
           </div>
           <div className={style.itemInfo + " " + style.itemInfoSum}>
             <span>{getSumPrice()}</span>
+            <span>{getSumQuantity()}</span>
           </div>
         </div>
         <div className={style.infoCredit}>

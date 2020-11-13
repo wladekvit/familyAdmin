@@ -33,7 +33,6 @@
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
-        //height: 50px;
         border-radius: 6px;
         background-color: var(--dark--back);
         font-size: 10px;
@@ -54,12 +53,22 @@
 
       }
       .headerInfo {
+        user-select: none;
         border-radius: 6px;
         background-color: var(--dark--back);
-        @include aloneCenterPosition;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         grid-column: 1/5;
+        font-size: 12px;
         span {
           display: block;
+        }
+        span:nth-child(1) {
+          //text-transform: lowercase;
+          color: #8bffed;
+          letter-spacing: 1.2px;
         }
       }
 

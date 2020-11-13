@@ -1,7 +1,9 @@
-const getPurchasesByName = (idProduct) => {
+const getPurchasesByName = (idProduct, dateFrom, dateTo) => {
   return {
     action: 'getPurchasesByName',
-    idProduct
+    idProduct,
+    dateFrom,
+    dateTo
   };
 }
 export default getPurchasesByName;
