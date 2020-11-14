@@ -159,6 +159,7 @@ const AddCredit = () => {
 
   return (
     <div className={style.wrapper}>
+      {/*{console.log("%cRENDER COMPONENT AddCredit", "color: #00ff00")}*/}
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <span>что купил то внеси 🤠</span>

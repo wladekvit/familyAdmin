@@ -1,0 +1,42 @@
+@import "src/style/mixins";
+.wrapper {
+  width: 98%;
+  background-color: var(--item--bc);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: auto 80px 40px 40px;
+  grid-auto-rows: 40px;
+  grid-gap: 3px;
+  padding: 3px;
+
+  select {
+    width: 85%;
+    border-radius: 3px;
+    border: none;
+    background-color: var(--dark--back);
+    color: var(--color-text);
+  }
+
+  input {
+    @include inputWrapper(100%, transparent);
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  div {
+    @include aloneCenterPosition;
+    border-radius: 4px;
+    background-color: var(--dark--back);
+    color: var(--color-text);
+  }
+  div:nth-child(6) {
+    grid-column: 2/5;
+  }
+
+  .customButton {
+    width: 90%;
+    height: 30px;
+    border-radius: 15px;
+  }
+}
