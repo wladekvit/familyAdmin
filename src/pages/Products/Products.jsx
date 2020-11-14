@@ -41,7 +41,7 @@ const Products = () => {
     );
   };
   const getDisableEditButton = () => {
-    return selCategory && selCategory?.category !== "";
+    return selCategory && selCategory?.category && !getDisableButton();
   };
   const onKeyDownHandler = useCallback(
     (e) => {

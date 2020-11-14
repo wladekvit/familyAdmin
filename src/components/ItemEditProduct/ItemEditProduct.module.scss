@@ -30,6 +30,7 @@
     background-color: var(--dark--back);
     color: var(--color-text);
   }
+  
   div:nth-child(6) {
     grid-column: 2/5;
   }
@@ -39,4 +40,21 @@
     height: 30px;
     border-radius: 15px;
   }
+}
+
+@media screen and (max-width: 615px) {
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    div:nth-child(1) {
+      grid-column: 1/4;
+    }
+    div:nth-child(5) {
+      grid-column: 1/4;
+    }
+    div:nth-child(6) {
+      grid-column: 1/4;
+    }
+  }
+
 }

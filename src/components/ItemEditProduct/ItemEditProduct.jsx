@@ -19,8 +19,8 @@ const ItemEditProduct = ({ product, units, updatingProducts }) => {
     if (!delMode && !editMode && (!unitMode || unitMode)) {
       if (selUnit !== e.target.value) {
         const unitName = units.find((ob) => ob._id === +e.target.value).unit;
-        console.log(product);
-        console.log(units);
+        // console.log(product);
+        // console.log(units);
         setSelUnit(e.target.value);
         setEditMessage(`установить в (${unitName.toUpperCase()})`);
         setUnitMode(true);
