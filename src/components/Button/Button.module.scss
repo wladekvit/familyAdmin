@@ -17,8 +17,9 @@
 .wrapperDisable {
   cursor: not-allowed;
   //pointer-events: none;
-  background-color: #664391;
-  color: #989898;
+  //background-color: #664391;
+  opacity: 0.4;
+  //color: #989898;
 }
 
 .wrapper:hover {

@@ -25,13 +25,21 @@
   }
 
   div {
+    user-select: none;
     @include aloneCenterPosition;
     border-radius: 4px;
     background-color: var(--dark--back);
     color: var(--color-text);
   }
-  
-  div:nth-child(6) {
+
+  .buttonAction {
+    grid-column: 1/2;
+  }
+  .buttonCancel {
+    grid-column: 2/5;
+  }
+
+  .fullSpas {
     grid-column: 2/5;
   }
 
@@ -39,21 +47,26 @@
     width: 90%;
     height: 30px;
     border-radius: 15px;
+    font-size: 12px;
   }
 }
 
-@media screen and (max-width: 615px) {
+@media screen and (max-width: 496px) {
   .wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+
     div:nth-child(1) {
       grid-column: 1/4;
     }
-    div:nth-child(5) {
-      grid-column: 1/4;
+    .fullSpas {
+      grid-column: 1/5;
     }
-    div:nth-child(6) {
-      grid-column: 1/4;
+    .buttonAction {
+      grid-column: 1/5;
+    }
+    .buttonCancel {
+      grid-column: 1/5;
     }
   }
 

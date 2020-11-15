@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useGetCategories = () => {
-  const [dataCat, setDataCat] = useState(0);
-  const changeCategory = () => {
-    setDataCat(Math.floor(Math.random() * Math.floor(100)));
+  //info modal
+  const [isOpen, setIsOpen] = useState(false);
+  const [messageModal, setMessageModal] = useState("");
+  const [successModal, setSuccessModal] = useState(true);
+
+  const setStateModalHook = (open = false, message = "", success = successModal) => {
+    setIsOpen(open);
+    setMessageModal(message);
+    setSuccessModal(success);
   };
-  console.log(dataCat)
-  return { data: dataCat, changeCategory };
+
+
+  return [isOpen, messageModal, successModal, setStateModalHook]
 };
 
 export default useGetCategories;

@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useCallback, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import style from "./Products.module.scss";
 import Button from "../../components/Button";
 import ModalSelectCategory from "./components/ModalSelectCategory";
@@ -7,12 +8,18 @@ import getCategories from "../../queries/getCategories";
 import { restRequest } from "../../utils/restRequest";
 import getUnits from "../../queries/getUnits";
 import addProducts from "../../queries/addProducts";
-import ModalInfo from "../../components/ModalInfo";
-import { errorProcessing } from "../../utils/initialisation";
 import getProducts from "../../queries/getProducts";
-import ModalItemsEdit from "../../components/ModalItemsEdit/ModalItemsEdit";
+import { withInfoContainer } from "../../components/hoc/withInfoContainer";
+import Icon from "../../components/Icon/Icon";
+import ItemEditProduct from "../../components/ItemEditProduct";
 
-const Products = () => {
+const MODE = {
+  add: 1,
+  edit: 2
+};
+
+const Products = ({ setParamsIfoModal }) => {
+  const [modeCheck, setModeCheck] = useState(MODE.add);
   const [modalSelectOpen, setModalSelectOpen] = useState(false);
   const [modalUnitsOpen, setModalUnitsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -22,11 +29,6 @@ const Products = () => {
   const [productName, setProductName] = useState("");
   const [products, setProducts] = useState([]);
   const [productsObj, setProductsObj] = useState([]);
-  //info modal
-  const [infoModal, setInfoModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
-  const [messageModal, setMessageModal] = useState("");
-  const [successModal, setSuccessModal] = useState(true);
 
   const onChangeInput = (e) => {
     setProductName(e.target.value.toLowerCase());
@@ -40,13 +42,9 @@ const Products = () => {
       selUnits?.unit !== ""
     );
   };
-  const getDisableEditButton = () => {
-    return selCategory && selCategory?.category && !getDisableButton();
-  };
+
   const onKeyDownHandler = useCallback(
     (e) => {
-      // console.log(e.which);
-      // alert(e.which);
       const { which } = e;
       switch (which) {
         case 13:
@@ -61,19 +59,16 @@ const Products = () => {
     },
     [productName, selCategory, selUnits]
   );
-  const onClickButtonEdit = () => {
-    setEditModal(true);
-  };
+
   const onClickButtonAdd = () => {
     const objParams = addProducts(productName, selCategory._id, selUnits._id);
     setProductName("");
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
-        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+        const cod = Object.keys(data.error)[0];
+        setParamsIfoModal(true, data.error[cod], false);
       } else {
-        setMessageModal(`Успех!!! ${productName.toUpperCase()} добавлено в базу`);
-        setInfoModal(true);
-        setSuccessModal(true);
+        setParamsIfoModal(true, `Успех!!! ${productName.toUpperCase()} добавлено в базу`, true);
         if (selCategory) {
           onSelectCategory(selCategory);
         }
@@ -85,7 +80,8 @@ const Products = () => {
     const objParams = getProducts(selectionCategory._id);
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
-        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+        const cod = Object.keys(data.error)[0];
+        setParamsIfoModal(true, data.error[cod], false);
       } else {
         const prods = data.map((item) => item.name.toLowerCase()).sort();
         // console.log(prods);
@@ -104,24 +100,28 @@ const Products = () => {
         .map((pr, i) => <span key={i}>{pr}</span>);
     }
   };
-  const updateProducts = async () => {
+  const updateProducts = async (messageInfo) => {
     const objParams = getProducts(selCategory._id);
     const data = await restRequest(objParams, true);
     try {
       if (data && data.hasOwnProperty("error")) {
-        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+        const cod = Object.keys(data.error)[0];
+        setParamsIfoModal(true, data.error[cod], false);
       } else {
         const prods = data.map((item) => item.name.toLowerCase()).sort();
         setProducts(prods);
         setProductsObj(data);
+        if (messageInfo) {
+          setParamsIfoModal(true, messageInfo, true);
+        }
       }
     } catch (err) {
-      setMessageModal(`Что-то пошло не так. Сервер не отвечает`);
-      setInfoModal(true);
-      setSuccessModal(false);
+      setParamsIfoModal(true, "Что-то пошло не так. Сервер не отвечает", false);
       console.log("error", err);
     }
-
+  };
+  const onChangeStatus = (value) => {
+    setModeCheck(value);
   };
 
   useEffect(() => {
@@ -135,13 +135,15 @@ const Products = () => {
     restRequest(objParams)
       .then((data) => {
         if (data && data.hasOwnProperty("error")) {
-          errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+          const cod = Object.keys(data.error)[0];
+          setParamsIfoModal(true, data.error[cod], false);
         } else {
           setUnits(data);
           objParams = getCategories();
           restRequest(objParams).then((data) => {
             if (data && data.hasOwnProperty("error")) {
-              errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+              const cod = Object.keys(data.error)[0];
+              setParamsIfoModal(true, data.error[cod], false);
             } else {
               data.sort((a, b) => (a.category > b.category ? 1 : -1));
               setCategories(data);
@@ -150,61 +152,85 @@ const Products = () => {
         }
       })
       .catch((err) => {
-        setMessageModal(`Что-то пошло не так. Сервер не отвечает`);
-        setInfoModal(true);
-        setSuccessModal(false);
+        setParamsIfoModal(true, "Что-то пошло не так. Сервер не отвечает", false);
         console.log("error", err);
       });
   }, []);
 
+  const styleSection =
+    modeCheck === MODE.add ? style.container_sections : style.container_sections_edit;
   return (
     <div className={style.wrapper}>
-      <div className={style.container_sections}>
+      <div className={styleSection}>
         <div className={style.infoTitle}>
-          <span>добавить название продукта, товара, услуги</span>
+          <div className={style.itemInfo} onClick={() => onChangeStatus(MODE.add)}>
+            <span>добавлять</span>
+            <Icon name="radioButton" check={modeCheck === MODE.add} />
+          </div>
+          <div className={style.itemInfo} onClick={() => onChangeStatus(MODE.edit)}>
+            <span>редактировать</span>
+            <Icon name="radioButton" check={modeCheck === MODE.edit} />
+          </div>
         </div>
         <div className={style.infoCredit}>
-          <span>Вбери категорию 👁️</span>
-          <input
-            type="text"
-            placeholder="🖋 тут выбери категорию"
-            onClick={() => setModalSelectOpen(true)}
-            value={selCategory?.category || ""}
-            readOnly={true}
-            style={{ cursor: "pointer" }}
-          />
-          <span>Вбери единицу измерения ⚖</span>
-          <input
-            type="text"
-            placeholder="🖋 тут выбери ед. измерения"
-            onClick={() => setModalUnitsOpen(true)}
-            value={selUnits?.unit || ""}
-            readOnly={true}
-            style={{ cursor: "pointer" }}
-          />
-          <span>Название продукта 🍎 🥼 🔨</span>
-          <input
-            type="text"
-            placeholder="🖋 пиши тут название"
-            onChange={onChangeInput}
-            value={productName}
-          />
-          <div className={style.findContainer}>{findProducts()}</div>
+          <div className={style.itemInput}>
+            <span>Вбери категорию 👁️</span>
+            <input
+              type="text"
+              placeholder="🖋 тут выбери категорию"
+              onClick={() => setModalSelectOpen(true)}
+              value={selCategory?.category || ""}
+              readOnly={true}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          {modeCheck === MODE.add && (
+            <div className={style.itemInput}>
+              <span>Вбери единицу измерения ⚖</span>
+              <input
+                type="text"
+                placeholder="🖋 тут выбери ед. измерения"
+                onClick={() => setModalUnitsOpen(true)}
+                value={selUnits?.unit || ""}
+                readOnly={true}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+          )}
+          {modeCheck === MODE.add && (
+            <div className={style.itemInput}>
+              <span>Название продукта 🍎 🥼 🔨</span>
+              <input
+                type="text"
+                placeholder="🖋 пиши тут название"
+                onChange={onChangeInput}
+                value={productName}
+              />
+              <div className={style.findContainer}>{findProducts()}</div>
+            </div>
+          )}
+          {modeCheck === MODE.edit && setProductsObj.length > 0 && (
+            <div className={style.contentProducts}>
+              {productsObj.map((prod) => (
+                <ItemEditProduct
+                  key={prod._id}
+                  product={prod}
+                  units={units}
+                  updatingProducts={updateProducts}
+                />
+              ))}
+            </div>
+          )}
         </div>
-        <div className={style.infoFooter}>
-          <Button
-            title="добавить"
-            clickCallBack={onClickButtonAdd}
-            disable={getDisableButton()}
-            style={{ width: "48%" }}
-          />
-          <Button
-            title="изменить"
-            clickCallBack={onClickButtonEdit}
-            disable={getDisableEditButton()}
-            style={{ width: "48%" }}
-          />
-        </div>
+        {modeCheck === MODE.add && (
+          <div className={style.infoFooter}>
+            <Button
+              title="добавить"
+              clickCallBack={onClickButtonAdd}
+              disable={getDisableButton()}
+            />
+          </div>
+        )}
       </div>
       <ModalSelectCategory
         isOpen={modalSelectOpen}
@@ -218,30 +244,15 @@ const Products = () => {
         categories={units}
         onSelectCategories={onSelectUnits}
       />
-      <ModalInfo
-        isOpen={infoModal}
-        message={messageModal}
-        success={successModal}
-        closeModalInfo={setInfoModal}
-        duration={3000}
-      />
-      <ModalItemsEdit
-        isOpen={editModal}
-        closeOpen={setEditModal}
-        products={productsObj}
-        units={units}
-        update={updateProducts}
-      />
     </div>
   );
 };
 
 Products.propTypes = {
-  // bla: PropTypes.string,
+  setParamsIfoModal: PropTypes.func
 };
-
 Products.defaultProps = {
-  // bla: 'test',
+  setParamsIfoModal: () => {}
 };
 
-export default Products;
+export default withInfoContainer(Products, 4000);

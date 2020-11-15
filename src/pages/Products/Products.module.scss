@@ -6,7 +6,7 @@ $widthWrapper: 320px;
   @include aloneCenterPosition;
   text-align: center;
 
-  .container_sections {
+  .container_sections, .container_sections_edit {
     width: 90%;
     max-width: 450px;
     height: 90%;
@@ -18,51 +18,70 @@ $widthWrapper: 320px;
     background-color: var(--border);
     border-radius: 10px;
 
+
     .infoTitle {
-      @include aloneCenterPosition;
+      user-select: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 4px;
+      padding: 4px;
       background-color: var(--bg-main);
       border-radius: 10px;
       text-transform: uppercase;
       color: var(--color-text);
+      font-size: 12px;
 
+      .itemInfo {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--dark--back);
+        border-radius: 8px;
+
+        span {
+          margin-right: 10px;
+        }
+      }
     }
 
     .infoCredit {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+
       background-color: var(--bg-main);
       border-radius: 10px;
       color: var(--color-text);
       text-align: left;
       overflow: auto;
 
-      span {
-        width: 94%;
-        user-select: none;
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
+      .itemInput {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
-      input {
-        color: var(--accent);
-        width: 90%;
-        border: 0;
-        border-radius: 6px;
-        min-height: 40px;
-        background-color: var(--input-background);
-        padding: 0 10px;
-        font-size: 18px;
-      }
+        span {
+          width: 94%;
+          user-select: none;
+          margin-bottom: 10px;
+        }
 
-      input {
-        -webkit-appearance: none;
-      }
-
-      .input:focus {
-        outline: none !important;
+        input {
+          color: var(--accent);
+          width: 90%;
+          border: 0;
+          border-radius: 6px;
+          min-height: 40px;
+          background-color: var(--input-background);
+          padding: 0 10px;
+          font-size: 18px;
+          -webkit-appearance: none;
+        }
+        .input:focus {
+          outline: none !important;
+        }
       }
 
       .findContainer {
@@ -80,7 +99,12 @@ $widthWrapper: 320px;
         span {
           display: block;
         }
+      }
 
+      .contentProducts {
+        grid-row: 2/4;
+        overflow-y: auto;
+        overflow-x: hidden;
       }
     }
 
@@ -91,6 +115,8 @@ $widthWrapper: 320px;
     }
   }
 
+  .container_sections_edit {
+    grid-template-rows: 60px 1fr;
 
+  }
 }
-

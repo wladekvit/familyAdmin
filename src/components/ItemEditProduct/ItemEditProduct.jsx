@@ -6,123 +6,133 @@ import Button from "../Button";
 import updateProducts from "../../queries/updateProducts";
 import { restRequest } from "../../utils/restRequest";
 import removeProducts from "../../queries/removeProducts";
+import cn from "classnames/bind";
+import { withInfoContainer } from "../hoc/withInfoContainer";
 
-const ItemEditProduct = ({ product, units, updatingProducts }) => {
-  const [editMode, setEditMode] = useState(false);
-  const [delMode, setDelMode] = useState(false);
-  const [unitMode, setUnitMode] = useState(false);
+const cx = cn.bind(s);
+
+const MODE = {
+  noMode: 0,
+  editMode: 1,
+  unitMode: 2,
+  delMode: 3
+};
+
+const ItemEditProduct = ({ product, units, updatingProducts, setParamsIfoModal }) => {
   const [editMessage, setEditMessage] = useState("");
   const [selUnit, setSelUnit] = useState(product.unit);
   const [selName, setSelName] = useState(product.name);
+  const [settingMode, setSettingMode] = useState(MODE.noMode);
 
   const onChangeUnitValue = (e) => {
-    if (!delMode && !editMode && (!unitMode || unitMode)) {
-      if (selUnit !== e.target.value) {
-        const unitName = units.find((ob) => ob._id === +e.target.value).unit;
-        // console.log(product);
-        // console.log(units);
-        setSelUnit(e.target.value);
-        setEditMessage(`установить в (${unitName.toUpperCase()})`);
-        setUnitMode(true);
-      }
-    }
+    const unitName = units.find((ob) => ob._id === +e.target.value).unit;
+    setSettingMode(MODE.unitMode);
+    setEditMessage(`установить в (${unitName.toUpperCase()})`);
+    setSelUnit(e.target.value);
+  };
+
+  const onChangeEditMode = () => {
+    setSettingMode(MODE.editMode);
+    setEditMessage("сохранить");
+
+  };
+  const onChangeDeleteItem = () => {
+    setSettingMode(MODE.delMode);
+    setEditMessage("хочешь удалить");
   };
   const onChangeNameValue = (e) => {
-    if (product.name !== e.target.value) {
-      setSelName(e.target.value);
-      setEditMessage(`заменить на (${e.target.value})`);
-    }
+    setSelName(e.target.value);
   };
-  const onChangeEditMode = () => {
-    if (!delMode && !unitMode && (editMode || !editMode)) {
-      setEditMode(true);
-      setEditMessage(`заменить на (${selName})`);
-    }
-  };
+
   const onCancel = () => {
     setSelUnit(product.unit);
     setSelName(product.name);
-    setEditMode(false);
-    setDelMode(false);
-    setUnitMode(false);
-  };
-  const onDeleteItem = () => {
-    if (!editMode && !unitMode && (delMode || !delMode)) {
-      setDelMode(true);
-      setEditMessage("хочешь удалить");
-    }
-
+    setSettingMode(MODE.noMode);
   };
   const onConfirmAction = () => {
-    if (editMode || unitMode) {
+    if (settingMode === MODE.editMode || settingMode === MODE.unitMode) {
       updateProduct().then(() => {
-        setEditMode(false);
-        setUnitMode(false);
+        setSettingMode(MODE.noMode);
       });
-    } else if (delMode) {
-      removingProducts().then();
+    } else if (settingMode === MODE.delMode) {
+      removingProducts().then(() => {
+        setSettingMode(MODE.noMode);
+      });
     }
   };
-
   const updateProduct = async () => {
     const objParams = updateProducts(product._id, selName, selUnit);
     const data = await restRequest(objParams);
     if (data && data.hasOwnProperty("error")) {
       onCancel();
+      setParamsIfoModal(true, "Что-то пошло не так. Сервер не отвечает", false);
     } else {
-      updatingProducts();
+      updatingProducts("Название продукта успешно обновлено");
     }
-  }
+  };
   const removingProducts = async () => {
     const objParams = removeProducts(product._id);
+    const name = product.name;
     try {
       const data = await restRequest(objParams);
       if (data && data.hasOwnProperty("error")) {
-        setEditMessage(`нельзя его удалять!!!`);
+        const cod = Object.keys(data.error)[0];
+        setParamsIfoModal(true, data.error[cod], false);
       } else {
         onCancel();
-        updatingProducts();
+        const mess = `Товар ${name} успешно удален из базы`
+        updatingProducts(mess);
       }
     } catch (e) {
       setEditMessage(`что-то не так`);
     }
-
-  }
-
+  };
+  const getDisableButtons = () => {
+    return (settingMode === MODE.editMode && product.name !== selName) ||
+      settingMode === MODE.delMode ||
+      settingMode === MODE.unitMode;
+  };
 
   return (
     <div className={s.wrapper}>
       <div>
-        {!editMode && <span>{selName}</span>}
-        {editMode && <input value={selName} onChange={onChangeNameValue} />}
+        {settingMode !== MODE.editMode && <span>{selName}</span>}
+        {settingMode === MODE.editMode && <input value={selName} onChange={onChangeNameValue} />}
       </div>
-      <div>
-        <select value={selUnit} onChange={onChangeUnitValue}>
-          {units.map((item) => (
-            <option key={item._id} value={item._id}>
-              {item.unit}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div onClick={onChangeEditMode}>
-        <Icon name={editMode ? "save" : "bird"} />
-      </div>
-      <div onClick={onDeleteItem}>
-        <Icon name="trash" />
-      </div>
-      {(editMode || delMode || unitMode) && (
-        <div>
+      {(settingMode === MODE.noMode || settingMode === MODE.unitMode) && (
+        <div className={cx({ fullSpas:  settingMode === MODE.unitMode})}>
+          <select value={selUnit} onChange={onChangeUnitValue}>
+            {units.map((item) => (
+              <option key={item._id} value={item._id}>
+                {item.unit}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      {(settingMode === MODE.noMode || settingMode === MODE.editMode) && (
+        <div className={cx({ fullSpas:  settingMode === MODE.editMode})} onClick={onChangeEditMode}>
+          <Icon name={settingMode === MODE.editMode ? "save" : "bird"} />
+        </div>
+      )}
+      {(settingMode === MODE.noMode || settingMode === MODE.delMode) && (
+        <div className={cx({ fullSpas:  settingMode === MODE.delMode})} onClick={onChangeDeleteItem}>
+          <Icon name="trash" />
+        </div>
+      )}
+      {settingMode !== MODE.noMode && (
+        <div className={s.buttonAction}>
           <Button
             title={editMessage}
             clickCallBack={onConfirmAction}
             style={{ backgroundColor: "#3d9245" }}
             className={s.customButton}
+            disable={getDisableButtons()}
           />
         </div>
       )}
-      {(editMode || delMode || unitMode) && (
-        <div>
+      {settingMode !== MODE.noMode && (
+        <div className={s.buttonCancel}>
           <Button
             title="отмена"
             style={{ backgroundColor: "#ee4735" }}
@@ -143,4 +153,4 @@ ItemEditProduct.propTypes = {
 
 ItemEditProduct.defaultProps = {};
 
-export default ItemEditProduct;
+export default withInfoContainer(ItemEditProduct, 6000);
