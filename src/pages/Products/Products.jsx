@@ -12,14 +12,21 @@ import getProducts from "../../queries/getProducts";
 import Icon from "../../components/Icon/Icon";
 import ItemEditProduct from "../../components/ItemEditProduct";
 import ModalContext from "../../components/ModalContext";
+import { useRequestQueries } from "../../hooks/useRequestQueries";
 
 const MODE = {
   add: 1,
   edit: 2
 };
 
+const objectUnits = getUnits();
+const objectCategories = getCategories();
+
 const Products = () => {
   const { setParamsIfoModal } = useContext(ModalContext);
+  const { data: dataUnits } = useRequestQueries(objectUnits, setParamsIfoModal);
+  const { data: dataCategories } = useRequestQueries(objectCategories, setParamsIfoModal);
+
   const [modeCheck, setModeCheck] = useState(MODE.add);
   const [modalSelectOpen, setModalSelectOpen] = useState(false);
   const [modalUnitsOpen, setModalUnitsOpen] = useState(false);
@@ -83,7 +90,6 @@ const Products = () => {
         setParamsIfoModal(true, data.error, false);
       } else {
         const prods = data.map((item) => item.name.toLowerCase()).sort();
-        // console.log(prods);
         setProducts(prods);
         setProductsObj(data);
       }
@@ -128,31 +134,14 @@ const Products = () => {
       window.removeEventListener("keydown", onKeyDownHandler);
     };
   }, [onKeyDownHandler]);
-
   useEffect(() => {
-    let objParams = getUnits();
-    restRequest(objParams)
-      .then((data) => {
-        if (data && data.hasOwnProperty("error")) {
-          setParamsIfoModal(true, data.error, false);
-        } else {
-          setUnits(data);
-          objParams = getCategories();
-          restRequest(objParams).then((data) => {
-            if (data && data.hasOwnProperty("error")) {
-              setParamsIfoModal(true, data.error, false);
-            } else {
-              data.sort((a, b) => (a.category > b.category ? 1 : -1));
-              setCategories(data);
-            }
-          });
-        }
-      })
-      .catch((err) => {
-        setParamsIfoModal(true, "Что-то пошло не так. Сервер не отвечает", false);
-        console.log("error", err);
-      });
-  }, []);
+    dataUnits.sort((a, b) => a.unit > b.unit ? 1 : -1);
+    setUnits(dataUnits);
+  }, [dataUnits]);
+  useEffect(() => {
+    dataCategories.sort((a, b) => a.category > b.category ? 1 : -1);
+    setCategories(dataCategories);
+  }, [dataCategories]);
 
   const styleSection =
     modeCheck === MODE.add ? style.container_sections : style.container_sections_edit;

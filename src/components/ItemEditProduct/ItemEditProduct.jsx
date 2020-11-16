@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import s from "./ItemEditProduct.module.scss";
 import Icon from "../Icon/Icon";
@@ -7,7 +7,7 @@ import updateProducts from "../../queries/updateProducts";
 import { restRequest } from "../../utils/restRequest";
 import removeProducts from "../../queries/removeProducts";
 import cn from "classnames/bind";
-import { withInfoContainer } from "../hoc/withInfoContainer";
+import ModalContext from "../ModalContext";
 
 const cx = cn.bind(s);
 
@@ -18,7 +18,8 @@ const MODE = {
   delMode: 3
 };
 
-const ItemEditProduct = ({ product, units, updatingProducts, setParamsIfoModal }) => {
+const ItemEditProduct = ({ product, units, updatingProducts }) => {
+  const { setParamsIfoModal } = useContext(ModalContext);
   const [editMessage, setEditMessage] = useState("");
   const [selUnit, setSelUnit] = useState(product.unit);
   const [selName, setSelName] = useState(product.name);
@@ -76,8 +77,7 @@ const ItemEditProduct = ({ product, units, updatingProducts, setParamsIfoModal }
     try {
       const data = await restRequest(objParams);
       if (data && data.hasOwnProperty("error")) {
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false, 6000);
       } else {
         onCancel();
         const mess = `Товар ${name} успешно удален из базы`
@@ -153,4 +153,4 @@ ItemEditProduct.propTypes = {
 
 ItemEditProduct.defaultProps = {};
 
-export default withInfoContainer(ItemEditProduct, 6000);
+export default ItemEditProduct;

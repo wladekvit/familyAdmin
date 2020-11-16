@@ -12,7 +12,7 @@ const Home = () => {
 
   return (
     <div className={style.wrapper}>
-      {/*{console.log("%cRENDER COMPONENT Home", "color: #00ff00")}*/}
+      {console.log("%cRENDER COMPONENT Home", "color: #00ff00")}
       <h2>Приходы и расходы</h2>
       <div className={style.container_sections}>
         <div className={style.infoTitle}>

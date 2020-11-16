@@ -81,7 +81,7 @@ const ViewPurchases = () => {
     try {
       const objParams = getPurchasesByDate(selectDate);
       const purchases = await restRequest(objParams);
-      console.log(purchases);
+      // console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {
         setParamsIfoModal(true, purchases.error, true);
         setItemsData([]);
@@ -97,7 +97,7 @@ const ViewPurchases = () => {
     try {
       const objParams = getPurchasesByPeriod(selDateFrom, selDateTo);
       const purchases = await restRequest(objParams);
-      console.log(purchases);
+      // console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {
         setParamsIfoModal(true, purchases.error, true);
         setItemsData([]);

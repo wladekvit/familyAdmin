@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import ModalInfo from "../ModalInfo";
+import ModalInfo from "../components/ModalInfo";
 
 export const withInfoContainer = (WrapperComponent, duration) => {
   return (props) => {
