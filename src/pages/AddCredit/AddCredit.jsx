@@ -33,7 +33,7 @@ const AddCredit = () => {
   const onSelectCategory = (selectCategory) => {
     onSelectCategoryUtility(selectCategory, setParamsIfoModal)
       .then((products) => {
-        console.log(products);
+        // console.log(products);
         setProducts(products);
         setSelCategory(selectCategory);
         setSelProduct(null);
