@@ -29,7 +29,7 @@ const Categories = () => {
       } else {
         data.sort((a, b) => (a.category > b.category ? 1 : -1));
         setCategories(data);
-        console.log(data);
+        // console.log(data);
       }
     });
   };
@@ -52,7 +52,7 @@ const Categories = () => {
 
   const delCategories = (name) => {
     const findCat = categories.find((cat) => name === cat.category);
-    const objParams = removeCategories(findCat._id);
+    const objParams = removeCategories(findCat.id);
     restRequest(objParams).then((data) => {
       console.log(data);
       if (data && data.hasOwnProperty("error")) {
@@ -77,9 +77,9 @@ const Categories = () => {
     if (nN === "" || nN === oN) {
       return;
     }
-    const objParams = editCategories(findCat._id, newName.toLowerCase());
+    const objParams = editCategories(findCat.id, newName.toLowerCase());
     restRequest(objParams).then((data) => {
-      console.log(data);
+      // console.log(data);
       if (data && data.hasOwnProperty("error")) {
         setParamsIfoModal(true, data.error, false);
       } else {
@@ -118,7 +118,7 @@ const Categories = () => {
         <div className={style.listCategories}>
           {categories.map((category) => (
             <ItemCategories
-              key={category._id}
+              key={category.id}
               name={category.category}
               onRemoveCategories={setCurrentNameCategory}
               onEditCategories={editCategory}

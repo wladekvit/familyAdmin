@@ -9,7 +9,7 @@ const ModalItemsEdit = ({ isOpen, closeOpen, products, units, update }) => {
     <Modal isOpen={isOpen} onRequestClose={() => closeOpen(false)} title="Товары">
       <div className={s.wrapper}>
         {products.map((prod) => (
-          <ItemEditProduct key={prod._id} product={prod} units={units} updatingProducts={update} />
+          <ItemEditProduct key={prod.id} product={prod} units={units} updatingProducts={update} />
         ))}
       </div>
     </Modal>

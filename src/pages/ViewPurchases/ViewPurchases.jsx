@@ -112,7 +112,7 @@ const ViewPurchases = () => {
   const getDataByName = async () => {
     // console.log(selProduct);
     try {
-      const objParams = getPurchasesByName(selProduct._id, selDateFrom, selDateTo);
+      const objParams = getPurchasesByName(selProduct.id, selDateFrom, selDateTo);
       const purchases = await restRequest(objParams);
       // console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {

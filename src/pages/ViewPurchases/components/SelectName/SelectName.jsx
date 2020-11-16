@@ -41,7 +41,7 @@ const SelectName = ({ productDefault, setProductDefault }) => {
 
   const onChangeCategory = async (selectCategory) => {
     try {
-      const objParams = getProducts(selectCategory._id);
+      const objParams = getProducts(selectCategory.id);
       const data = await restRequest(objParams);
       if (data && data.hasOwnProperty("error")) {
         errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);

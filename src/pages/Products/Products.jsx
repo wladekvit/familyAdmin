@@ -69,7 +69,7 @@ const Products = () => {
   );
 
   const onClickButtonAdd = () => {
-    const objParams = addProducts(productName, selCategory._id, selUnits._id);
+    const objParams = addProducts(productName, selCategory.id, selUnits.id);
     setProductName("");
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
@@ -84,7 +84,7 @@ const Products = () => {
   };
   const onSelectCategory = (selectionCategory) => {
     setSelCategory(selectionCategory);
-    const objParams = getProducts(selectionCategory._id);
+    const objParams = getProducts(selectionCategory.id);
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
         setParamsIfoModal(true, data.error, false);
@@ -106,7 +106,7 @@ const Products = () => {
     }
   };
   const updateProducts = async (messageInfo) => {
-    const objParams = getProducts(selCategory._id);
+    const objParams = getProducts(selCategory.id);
     const data = await restRequest(objParams, true);
     try {
       if (data && data.hasOwnProperty("error")) {
@@ -199,7 +199,7 @@ const Products = () => {
             <div className={style.contentProducts}>
               {productsObj.map((prod) => (
                 <ItemEditProduct
-                  key={prod._id}
+                  key={prod.id}
                   product={prod}
                   units={units}
                   updatingProducts={updateProducts}

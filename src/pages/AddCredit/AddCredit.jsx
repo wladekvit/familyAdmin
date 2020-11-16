@@ -46,8 +46,8 @@ const AddCredit = () => {
   const onClickButtonUpdate = () => {
     const objParams = addPurchases(
       selectDate,
-      +selProduct._id,
-      +selCategory._id,
+      +selProduct.id,
+      +selCategory.id,
       +price,
       +selProduct.unit,
       +quantity
@@ -98,7 +98,7 @@ const AddCredit = () => {
   };
   const getUnitProduct = () => {
     if (selProduct) {
-      const un = units.find((u) => u._id === +selProduct.unit);
+      const un = units.find((u) => u.id === +selProduct.unit);
       return un.unit;
     }
     return "непонятно что";

@@ -26,7 +26,7 @@ const ItemEditProduct = ({ product, units, updatingProducts }) => {
   const [settingMode, setSettingMode] = useState(MODE.noMode);
 
   const onChangeUnitValue = (e) => {
-    const unitName = units.find((ob) => ob._id === +e.target.value).unit;
+    const unitName = units.find((ob) => ob.id === +e.target.value).unit;
     setSettingMode(MODE.unitMode);
     setEditMessage(`установить в (${unitName.toUpperCase()})`);
     setSelUnit(e.target.value);
@@ -62,7 +62,7 @@ const ItemEditProduct = ({ product, units, updatingProducts }) => {
     }
   };
   const updateProduct = async () => {
-    const objParams = updateProducts(product._id, selName, selUnit);
+    const objParams = updateProducts(product.id, selName, selUnit);
     const data = await restRequest(objParams);
     if (data && data.hasOwnProperty("error")) {
       onCancel();
@@ -72,7 +72,7 @@ const ItemEditProduct = ({ product, units, updatingProducts }) => {
     }
   };
   const removingProducts = async () => {
-    const objParams = removeProducts(product._id);
+    const objParams = removeProducts(product.id);
     const name = product.name;
     try {
       const data = await restRequest(objParams);
@@ -103,7 +103,7 @@ const ItemEditProduct = ({ product, units, updatingProducts }) => {
         <div className={cx({ fullSpas:  settingMode === MODE.unitMode})}>
           <select value={selUnit} onChange={onChangeUnitValue}>
             {units.map((item) => (
-              <option key={item._id} value={item._id}>
+              <option key={item.id} value={item.id}>
                 {item.unit}
               </option>
             ))}

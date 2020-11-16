@@ -31,7 +31,7 @@ export const onSelectCategoryUtility = (
   setParamsIfoModal
 ) => {
   return new Promise((resolve, reject) => {
-    const objParams = getProducts(selectCategory._id);
+    const objParams = getProducts(selectCategory.id);
     restRequest(objParams).then((products) => {
       if (products && products.hasOwnProperty("error")) {
         setParamsIfoModal(true, products.error, false);
