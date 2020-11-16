@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import style from "./Categories.module.scss";
 import Button from "../../components/Button";
 import getCategories from "../../queries/getCategories";
@@ -83,7 +83,7 @@ const Categories = () => {
       if (data && data.hasOwnProperty("error")) {
         setParamsIfoModal(true, data.error, false);
       } else {
-        setParamsIfoModal(true, "Успех!!! Название категории изменено в базе", true);
+        setParamsIfoModal(true, "Успех!!! Название категории изменено в базе", true, 3000);
       }
     });
   };

@@ -1,16 +1,19 @@
 import React, { Fragment, useState } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import ModalInfo from "../ModalInfo";
 import ModalContext from "../ModalContext";
 import { getCurrentDate } from "../../utils/initialisation";
 
-const ModalWrapper = ({ children, duration }) => {
+const DEFAULT_DURATION = 5000;
+
+const ModalWrapper = ({ children }) => {
   const [selectCurrentDate, setSelectCurrentDate] = useState(getCurrentDate());
   const [isOpen, setIsOpen] = useState(false);
   const [messageModal, setMessageModal] = useState("");
   const [successModal, setSuccessModal] = useState(true);
+  const [duration, setDuration] = useState(DEFAULT_DURATION);
 
-  const setStateModalHook = (open = false, message = "", success = successModal) => {
+  const setStateModalHook = (open = false, message = "", success = successModal, currDuration) => {
 
     if (typeof message === "string") {
       setMessageModal(message);
@@ -20,6 +23,11 @@ const ModalWrapper = ({ children, duration }) => {
     }
     setIsOpen(open);
     setSuccessModal(success);
+    if (currDuration) {
+      setDuration(currDuration);
+    } else {
+      setDuration(DEFAULT_DURATION);
+    }
   };
 
   const changeSelectDate = (date) => {
@@ -48,12 +56,8 @@ const ModalWrapper = ({ children, duration }) => {
   );
 };
 
-ModalWrapper.propTypes = {
-  // bla: PropTypes.string,
-};
+ModalWrapper.propTypes = {};
 
-ModalWrapper.defaultProps = {
-  // bla: 'test',
-};
+ModalWrapper.defaultProps = {};
 
 export default ModalWrapper;

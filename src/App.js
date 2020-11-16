@@ -6,16 +6,9 @@ import { BrowserRouter } from "react-router-dom";
 import { customEventCategory, customEventProducts } from "./utils/constans";
 import getCategories from "./queries/getCategories";
 import { restRequest } from "./utils/restRequest";
-import StateContext from "./components/StateContext";
-import { getCurrentDate } from "./utils/initialisation";
 import ModalWrapper from "./components/ModalWrapper";
 
 function App() {
-  const [selectCurrentDate, setSelectCurrentDate] = useState(getCurrentDate());
-
-  const changeSelectDate = (date) => {
-    setSelectCurrentDate(getCurrentDate(date));
-  }
 
   const openWebSocked = () => {
     console.log("%cOPEN WebSocked", "color: #ff00ff");
@@ -48,11 +41,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <LeftMenu />
-        {/*<StateContext.Provider value={{ selectDate: selectCurrentDate, changeSelectDate }}>*/}
           <ModalWrapper>
             <Router />
           </ModalWrapper>
-        {/*</StateContext.Provider>*/}
       </BrowserRouter>
     </div>
   );
