@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useCallback, useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+// import PropTypes from "prop-types";
 import style from "./Products.module.scss";
 import Button from "../../components/Button";
 import ModalSelectCategory from "./components/ModalSelectCategory";
@@ -9,16 +9,17 @@ import { restRequest } from "../../utils/restRequest";
 import getUnits from "../../queries/getUnits";
 import addProducts from "../../queries/addProducts";
 import getProducts from "../../queries/getProducts";
-import { withInfoContainer } from "../../components/hoc/withInfoContainer";
 import Icon from "../../components/Icon/Icon";
 import ItemEditProduct from "../../components/ItemEditProduct";
+import ModalContext from "../../components/ModalContext";
 
 const MODE = {
   add: 1,
   edit: 2
 };
 
-const Products = ({ setParamsIfoModal }) => {
+const Products = () => {
+  const { setParamsIfoModal } = useContext(ModalContext);
   const [modeCheck, setModeCheck] = useState(MODE.add);
   const [modalSelectOpen, setModalSelectOpen] = useState(false);
   const [modalUnitsOpen, setModalUnitsOpen] = useState(false);
@@ -65,8 +66,7 @@ const Products = ({ setParamsIfoModal }) => {
     setProductName("");
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false);
       } else {
         setParamsIfoModal(true, `Успех!!! ${productName.toUpperCase()} добавлено в базу`, true);
         if (selCategory) {
@@ -80,8 +80,7 @@ const Products = ({ setParamsIfoModal }) => {
     const objParams = getProducts(selectionCategory._id);
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false);
       } else {
         const prods = data.map((item) => item.name.toLowerCase()).sort();
         // console.log(prods);
@@ -105,8 +104,7 @@ const Products = ({ setParamsIfoModal }) => {
     const data = await restRequest(objParams, true);
     try {
       if (data && data.hasOwnProperty("error")) {
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false);
       } else {
         const prods = data.map((item) => item.name.toLowerCase()).sort();
         setProducts(prods);
@@ -130,20 +128,19 @@ const Products = ({ setParamsIfoModal }) => {
       window.removeEventListener("keydown", onKeyDownHandler);
     };
   }, [onKeyDownHandler]);
+
   useEffect(() => {
     let objParams = getUnits();
     restRequest(objParams)
       .then((data) => {
         if (data && data.hasOwnProperty("error")) {
-          const cod = Object.keys(data.error)[0];
-          setParamsIfoModal(true, data.error[cod], false);
+          setParamsIfoModal(true, data.error, false);
         } else {
           setUnits(data);
           objParams = getCategories();
           restRequest(objParams).then((data) => {
             if (data && data.hasOwnProperty("error")) {
-              const cod = Object.keys(data.error)[0];
-              setParamsIfoModal(true, data.error[cod], false);
+              setParamsIfoModal(true, data.error, false);
             } else {
               data.sort((a, b) => (a.category > b.category ? 1 : -1));
               setCategories(data);
@@ -248,11 +245,7 @@ const Products = ({ setParamsIfoModal }) => {
   );
 };
 
-Products.propTypes = {
-  setParamsIfoModal: PropTypes.func
-};
-Products.defaultProps = {
-  setParamsIfoModal: () => {}
-};
+Products.propTypes = {};
+Products.defaultProps = {};
 
-export default withInfoContainer(Products, 4000);
+export default Products;

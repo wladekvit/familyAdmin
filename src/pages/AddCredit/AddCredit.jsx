@@ -1,28 +1,21 @@
 /* eslint-disable jsx-a11y/accessible-emoji,react-hooks/exhaustive-deps */
-import React, { useRef, useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import style from "./AddCredit.module.scss";
 import Button from "../../components/Button";
 import getCategories from "../../queries/getCategories";
 import { restRequest } from "../../utils/restRequest";
-import {
-  errorProcessing,
-  onSelectCategoryUtility
-} from "../../utils/initialisation";
-import ModalInfo from "../../components/ModalInfo";
+import { onSelectCategoryUtility } from "../../utils/initialisation";
 import ModalSelectCategory from "../Products/components/ModalSelectCategory";
 import getUnits from "../../queries/getUnits";
 import addPurchases from "../../queries/addPurchases";
 import { customEventProducts } from "../../utils/constans";
-import StateContext from "../../components/StateContext";
+import ModalContext from "../../components/ModalContext";
 
 const AddCredit = () => {
-  const { selectDate, changeSelectDate } = useContext(StateContext);
+  const { selectDate, changeSelectDate, setParamsIfoModal } = useContext(ModalContext);
   const [modalSelectOpen, setModalSelectOpen] = useState(false);
   const [modalProductOpen, setModalProductOpen] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [infoModal, setInfoModal] = useState(false);
-  const [messageModal, setMessageModal] = useState("");
-  const [successModal, setSuccessModal] = useState(true);
   const [products, setProducts] = useState([]);
   const [selCategory, setSelCategory] = useState(null);
   const [selProduct, setSelProduct] = useState(null);
@@ -31,7 +24,7 @@ const AddCredit = () => {
   const [units, setUnits] = useState([]);
 
   const onSelectCategory = (selectCategory) => {
-    onSelectCategoryUtility(selectCategory, setMessageModal, setInfoModal, setSuccessModal)
+    onSelectCategoryUtility(selectCategory, setParamsIfoModal)
       .then((products) => {
         console.log(products);
         setProducts(products);
@@ -55,13 +48,10 @@ const AddCredit = () => {
     // console.log("click");
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
-        errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, data.error, false);
       } else {
-        setMessageModal(
-          `Успех!!! Покупка ${selProduct.name.toUpperCase()} по цене ${price} грн, в количестве ${quantity} (${getUnitProduct()}) добавлена в базу 😊`
-        );
-        setInfoModal(true);
-        setSuccessModal(true);
+        const mess = `Успех!!! Покупка ${selProduct.name.toUpperCase()} по цене ${price} грн, в количестве ${quantity} (${getUnitProduct()}) добавлена в базу 😊`;
+        setParamsIfoModal(true, mess, true);
         setPrice("");
         setQuantity("");
       }
@@ -112,11 +102,8 @@ const AddCredit = () => {
     setSelProduct(null);
     setPrice("");
     setQuantity("");
-    setMessageModal("Кто-то добавил в базу новый вид продукта");
-    setInfoModal(true);
-    setSuccessModal(true);
-    
-  }, [infoModal, successModal, messageModal])
+    setParamsIfoModal(true, "Кто-то добавил в базу новый вид продукта", true);
+  }, [price, quantity]);
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDownHandler);
@@ -130,26 +117,23 @@ const AddCredit = () => {
     restRequest(objParams)
       .then((data) => {
         if (data && data.hasOwnProperty("error")) {
-          errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+          setParamsIfoModal(true, data.error, false);
         } else {
           setUnits(data);
           objParams = getCategories();
           restRequest(objParams).then((data) => {
             if (data && data.hasOwnProperty("error")) {
-              errorProcessing(data.error, setMessageModal, setInfoModal, setSuccessModal);
+              setParamsIfoModal(true, data.error, false);
             } else {
               data.sort((a, b) => (a.category > b.category ? 1 : -1));
               setCategories(data);
-              // setSelDate(getCurrentDate());
             }
           });
         }
       })
       .catch((err) => {
-        setMessageModal(`Что-то пошло не так. Сервер не отвечает`);
-        setInfoModal(true);
-        setSuccessModal(false);
-        console.log("error", err);
+        setParamsIfoModal(true, "Что-то пошло не так. Сервер не отвечает", false);
+        console.error("ADD_CREDIT error", err);
       });
     window.addEventListener(customEventProducts, onListenerChangeProducts);
     return () => {
@@ -217,13 +201,6 @@ const AddCredit = () => {
         closeOpen={setModalProductOpen}
         categories={products}
         onSelectCategories={onSelectProduct}
-      />
-      <ModalInfo
-        isOpen={infoModal}
-        message={messageModal}
-        success={successModal}
-        closeModalInfo={setInfoModal}
-        duration={2000}
       />
     </div>
   );

@@ -28,15 +28,13 @@ export const errorProcessing = (err, setMessageModal, setInfoModal, setSuccessMo
 
 export const onSelectCategoryUtility = (
   selectCategory,
-  setMessageModal,
-  setInfoModal,
-  setSuccessModal
+  setParamsIfoModal
 ) => {
   return new Promise((resolve, reject) => {
     const objParams = getProducts(selectCategory._id);
     restRequest(objParams).then((products) => {
       if (products && products.hasOwnProperty("error")) {
-        errorProcessing(products.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, products.error, false);
         reject();
       } else {
         products.sort((a, b) => (a.name > b.name ? 1 : -1));

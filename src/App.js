@@ -8,6 +8,7 @@ import getCategories from "./queries/getCategories";
 import { restRequest } from "./utils/restRequest";
 import StateContext from "./components/StateContext";
 import { getCurrentDate } from "./utils/initialisation";
+import ModalWrapper from "./components/ModalWrapper";
 
 function App() {
   const [selectCurrentDate, setSelectCurrentDate] = useState(getCurrentDate());
@@ -47,9 +48,11 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <LeftMenu />
-        <StateContext.Provider value={{ selectDate: selectCurrentDate, changeSelectDate }}>
-          <Router />
-        </StateContext.Provider>
+        {/*<StateContext.Provider value={{ selectDate: selectCurrentDate, changeSelectDate }}>*/}
+          <ModalWrapper>
+            <Router />
+          </ModalWrapper>
+        {/*</StateContext.Provider>*/}
       </BrowserRouter>
     </div>
   );

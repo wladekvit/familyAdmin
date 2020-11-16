@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import style from "./ViewPurchases.module.scss";
 import Button from "../../components/Button";
-import ModalInfo from "../../components/ModalInfo";
 import Icon from "../../components/Icon/Icon";
 import SelectDate from "./components/SelectDate";
 import ItemsData from "./components/ItemsData";
-import { errorProcessing, getCurrentDate } from "../../utils/initialisation";
+import { getCurrentDate } from "../../utils/initialisation";
 import { restRequest } from "../../utils/restRequest";
 import getPurchases from "../../queries/getPurchasesAll";
 import deletePurchases from "../../queries/deletePurchases";
@@ -17,6 +16,7 @@ import getPurchasesByPeriod from "../../queries/getPurchasesByPeriod";
 import SelectName from "./components/SelectName";
 import getPurchasesByName from "../../queries/getPurchasesByName";
 import { months } from "../../utils/constans";
+import ModalContext from "../../components/ModalContext";
 
 const StatusCheck = {
   all: 1,
@@ -26,11 +26,7 @@ const StatusCheck = {
 };
 
 const ViewPurchases = () => {
-  //info modal
-  const [infoModal, setInfoModal] = useState(false);
-  const [, setMessageModal] = useState("");
-  const [, setSuccessModal] = useState(true);
-
+  const { setParamsIfoModal } = useContext(ModalContext);
   const [statusCheck, setStatusCheck] = useState(StatusCheck.all);
   const [itemsData, setItemsData] = useState([]);
   const [selectDate, setSelectDate] = useState(getCurrentDate());
@@ -71,13 +67,13 @@ const ViewPurchases = () => {
       const objParams = getPurchases();
       const purchases = await restRequest(objParams);
       if (purchases && purchases.hasOwnProperty("error")) {
-        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, purchases.error, true);
         setItemsData([]);
       } else {
         setItemsData(purchases);
       }
     } catch (e) {
-      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setParamsIfoModal(true, "Что-то пошло не так", true);
       setItemsData([]);
     }
   };
@@ -87,13 +83,13 @@ const ViewPurchases = () => {
       const purchases = await restRequest(objParams);
       console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {
-        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, purchases.error, true);
         setItemsData([]);
       } else {
         setItemsData(purchases);
       }
     } catch (e) {
-      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setParamsIfoModal(true, "Что-то пошло не так", true);
       setItemsData([]);
     }
   };
@@ -103,13 +99,13 @@ const ViewPurchases = () => {
       const purchases = await restRequest(objParams);
       console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {
-        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, purchases.error, true);
         setItemsData([]);
       } else {
         setItemsData(purchases);
       }
     } catch (e) {
-      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setParamsIfoModal(true, "Что-то пошло не так", true);
       setItemsData([]);
     }
   };
@@ -120,13 +116,13 @@ const ViewPurchases = () => {
       const purchases = await restRequest(objParams);
       // console.log(purchases);
       if (purchases && purchases.hasOwnProperty("error")) {
-        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, purchases.error, true);
         setItemsData([]);
       } else {
         setItemsData(purchases);
       }
     } catch (e) {
-      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setParamsIfoModal(true, "Что-то пошло не так", true);
       setItemsData([]);
     }
   };
@@ -135,12 +131,12 @@ const ViewPurchases = () => {
       const objParams = deletePurchases(purchaseID);
       const purchases = await restRequest(objParams);
       if (purchases && purchases.hasOwnProperty("error")) {
-        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, purchases.error, true);
       } else {
         onClickButtonLoad();
       }
     } catch (e) {
-      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setParamsIfoModal(true, "Что-то пошло не так", true);
       setItemsData([]);
     }
   };
@@ -149,12 +145,12 @@ const ViewPurchases = () => {
       const objParams = updatePurchases(purchaseID, newPrice, newQuantity);
       const purchases = await restRequest(objParams);
       if (purchases && purchases.hasOwnProperty("error")) {
-        errorProcessing(purchases.error, setMessageModal, setInfoModal, setSuccessModal);
+        setParamsIfoModal(true, purchases.error, true);
       } else {
         onClickButtonLoad();
       }
     } catch (e) {
-      errorProcessing("Что-то пошло не так", setMessageModal, setInfoModal, setSuccessModal);
+      setParamsIfoModal(true, "Что-то пошло не так", true);
       setItemsData([]);
     }
   };
@@ -176,7 +172,7 @@ const ViewPurchases = () => {
     const sum = itemsData.reduce(function (accumulator, currentValue) {
       return accumulator + currentValue.price;
     }, initialValue);
-    return `${ sum.toFixed(2) } грн`;
+    return `${sum.toFixed(2)} грн`;
   };
   const getSumQuantity = () => {
     if (statusCheck === StatusCheck.byName && itemsData.length) {
@@ -188,7 +184,6 @@ const ViewPurchases = () => {
       return `${sum} (${unit})`;
     }
     return "";
-
   };
   const getPeriod = (date) => {
     let mth = "";
@@ -202,14 +197,13 @@ const ViewPurchases = () => {
       year = _date.getFullYear();
     }
     return `${day}-${mth}-${year}`;
-  }
+  };
   const onChangeStatus = (status) => {
     if (statusCheck === StatusCheck.byName) {
       setSelProduct({});
     }
     setStatusCheck(status);
     setItemsData([]);
-
   };
   useEffect(() => {
     getCurrentDateFromTo();
@@ -266,25 +260,13 @@ const ViewPurchases = () => {
             className={style.customButton}
           />
         </div>
-
-        <ModalInfo
-          isOpen={infoModal}
-          message="Всем привет дорогие. Это ТЕСТ!!!"
-          success={true}
-          closeModalInfo={setInfoModal}
-          duration={6000}
-        />
       </div>
     </div>
   );
 };
 
-ViewPurchases.propTypes = {
-  // bla: PropTypes.string,
-};
+ViewPurchases.propTypes = {};
 
-ViewPurchases.defaultProps = {
-  // bla: 'test',
-};
+ViewPurchases.defaultProps = {};
 
 export default ViewPurchases;

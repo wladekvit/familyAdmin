@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import style from "./Categories.module.scss";
 import Button from "../../components/Button";
@@ -12,9 +12,10 @@ import ModalRemoveCategory from "./components/ModalRemoveCategory";
 import addCategories from "../../queries/addCategories";
 import editCategories from "../../queries/editCategory";
 import { customEventCategory } from "../../utils/constans";
-import { withInfoContainer } from "../../components/hoc/withInfoContainer";
+import ModalContext from "../../components/ModalContext";
 
-const Categories = ({ setParamsIfoModal }) => {
+const Categories = () => {
+  const { setParamsIfoModal } = useContext(ModalContext);
   const [categories, setCategories] = useState([]);
   const [currentName, setCurrentName] = useState("");
   const [openModalAddCat, setOpenModalAddCat] = useState(false);
@@ -24,8 +25,7 @@ const Categories = ({ setParamsIfoModal }) => {
     const objParams = getCategories();
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false);
       } else {
         data.sort((a, b) => (a.category > b.category ? 1 : -1));
         setCategories(data);
@@ -38,8 +38,7 @@ const Categories = ({ setParamsIfoModal }) => {
     const objParams = addCategories(name.toLowerCase());
     restRequest(objParams).then((data) => {
       if (data && data.hasOwnProperty("error")) {
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false);
       } else {
         setParamsIfoModal(
           true,
@@ -60,8 +59,7 @@ const Categories = ({ setParamsIfoModal }) => {
         if (openModalDelCat) {
           setOpenModalDelCat(false);
         }
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false);
       } else {
         setParamsIfoModal(true, "Успех!!! Название категории удалено из базы 😴", true);
         if (openModalDelCat) {
@@ -83,8 +81,7 @@ const Categories = ({ setParamsIfoModal }) => {
     restRequest(objParams).then((data) => {
       console.log(data);
       if (data && data.hasOwnProperty("error")) {
-        const cod = Object.keys(data.error)[0];
-        setParamsIfoModal(true, data.error[cod], false);
+        setParamsIfoModal(true, data.error, false);
       } else {
         setParamsIfoModal(true, "Успех!!! Название категории изменено в базе", true);
       }
@@ -147,11 +144,7 @@ const Categories = ({ setParamsIfoModal }) => {
   );
 };
 
-Categories.propTypes = {
-  setParamsIfoModal: PropTypes.func
-};
-Categories.defaultProps = {
-  setParamsIfoModal: () => {}
-};
+Categories.propTypes = {};
+Categories.defaultProps = {};
 
-export default withInfoContainer(Categories, 4000);
+export default Categories;

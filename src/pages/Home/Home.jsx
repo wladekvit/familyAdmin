@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import style from "./Home.module.scss";
 import Button from "../../components/Button";
-import { withInfoContainer } from "../../components/hoc/withInfoContainer";
+import ModalContext from "../../components/ModalContext";
 
-const Home = ({ setParamsIfoModal }) => {
+const Home = () => {
+  const { setParamsIfoModal } = useContext(ModalContext);
   const onClickButtonUpdate = async () => {
     setParamsIfoModal(true, "Привет", false);
   };
@@ -34,4 +35,4 @@ Home.defaultProps = {
   setParamsIfoModal: () => {}
 };
 
-export default withInfoContainer(Home, 4000);
+export default Home;
