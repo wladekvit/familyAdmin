@@ -9,7 +9,6 @@ import { restRequest } from "./utils/restRequest";
 import ModalWrapper from "./components/ModalWrapper";
 
 function App() {
-
   const openWebSocked = () => {
     console.log("%cOPEN WebSocked", "color: #ff00ff");
   };
@@ -41,9 +40,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <LeftMenu />
-          <ModalWrapper>
-            <Router />
-          </ModalWrapper>
+        <ModalWrapper>
+          <Router />
+        </ModalWrapper>
       </BrowserRouter>
     </div>
   );

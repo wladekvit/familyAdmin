@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import style from "./Home.module.scss";
 import Button from "../../components/Button";
@@ -6,9 +6,14 @@ import ModalContext from "../../components/ModalContext";
 
 const Home = () => {
   const { setParamsIfoModal } = useContext(ModalContext);
+  const [count, setCount] = useState(0);
   const onClickButtonUpdate = async () => {
     setParamsIfoModal(true, "Привет", false);
   };
+
+  // useEffect(() => {
+  //   setCount((prev) => prev + 1);
+  // });
 
   return (
     <div className={style.wrapper}>
@@ -19,7 +24,7 @@ const Home = () => {
           <span>поступление средств</span>
         </div>
         <div className={style.infoCredit}>
-          <span>12 000 грн</span>
+          <span>{count}</span>
         </div>
         <Button title="обновить" clickCallBack={onClickButtonUpdate} />
       </div>

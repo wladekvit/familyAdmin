@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-// import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import ModalInfo from "../ModalInfo";
 import ModalContext from "../ModalContext";
 import { getCurrentDate } from "../../utils/initialisation";
@@ -14,7 +14,6 @@ const ModalWrapper = ({ children }) => {
   const [duration, setDuration] = useState(DEFAULT_DURATION);
 
   const setStateModalHook = (open = false, message = "", success = successModal, currDuration) => {
-
     if (typeof message === "string") {
       setMessageModal(message);
     } else {
