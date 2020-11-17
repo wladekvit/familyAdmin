@@ -18,7 +18,7 @@ function App() {
   const messageWebSocked = (response) => {
     console.log("%cMessage WebSocked", "color: #ff00ff", response.data);
     const categories = ["insertCategories", "editCategories", "deleteCategories"];
-    const products = ["addProducts"];
+    const products = ["addProducts", "removeProducts"];
     if (categories.findIndex((ob) => response.data === ob) !== -1) {
       const objParams = getCategories();
       restRequest(objParams, true).then((data) => {

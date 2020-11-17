@@ -12,10 +12,10 @@ import ModalRemoveCategory from "./components/ModalRemoveCategory";
 import addCategories from "../../queries/addCategories";
 import editCategories from "../../queries/editCategory";
 import { customEventCategory } from "../../utils/constans";
-import ModalContext from "../../components/ModalContext";
+import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const Categories = () => {
-  const { setParamsIfoModal } = useContext(ModalContext);
+  const { setParamsIfoModal } = useModalContext();
   const [categories, setCategories] = useState([]);
   const [currentName, setCurrentName] = useState("");
   const [openModalAddCat, setOpenModalAddCat] = useState(false);

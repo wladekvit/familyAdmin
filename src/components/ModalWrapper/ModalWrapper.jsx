@@ -1,8 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 //import PropTypes from "prop-types";
 import ModalInfo from "../ModalInfo";
-import ModalContext from "../ModalContext";
 import { getCurrentDate } from "../../utils/initialisation";
+
+const ModalContext = React.createContext(null);
+
+export const useModalContext = () => {
+  return useContext(ModalContext);
+}
 
 const DEFAULT_DURATION = 5000;
 

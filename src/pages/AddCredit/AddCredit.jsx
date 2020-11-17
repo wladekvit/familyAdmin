@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji,react-hooks/exhaustive-deps */
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import style from "./AddCredit.module.scss";
 import Button from "../../components/Button";
 import getCategories from "../../queries/getCategories";
@@ -9,14 +9,14 @@ import ModalSelectCategory from "../Products/components/ModalSelectCategory";
 import getUnits from "../../queries/getUnits";
 import addPurchases from "../../queries/addPurchases";
 import { customEventProducts } from "../../utils/constans";
-import ModalContext from "../../components/ModalContext";
 import { useRequestQueries } from "../../hooks/useRequestQueries";
+import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const objectUnits = getUnits();
 const objectCategories = getCategories();
 
 const AddCredit = () => {
-  const { selectDate, changeSelectDate, setParamsIfoModal } = useContext(ModalContext);
+  const { selectDate, changeSelectDate, setParamsIfoModal } = useModalContext();
   const { data: dataUnits } = useRequestQueries(objectUnits, setParamsIfoModal);
   const { data: dataCategories } = useRequestQueries(objectCategories, setParamsIfoModal);
 
@@ -105,6 +105,8 @@ const AddCredit = () => {
   };
 
   const onListenerChangeProducts = useCallback(() => {
+    setModalProductOpen(false);
+    setModalSelectOpen(false);
     setSelCategory(null);
     setSelProduct(null);
     setPrice("");

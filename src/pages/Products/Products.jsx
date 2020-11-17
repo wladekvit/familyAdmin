@@ -11,8 +11,8 @@ import addProducts from "../../queries/addProducts";
 import getProducts from "../../queries/getProducts";
 import Icon from "../../components/Icon/Icon";
 import ItemEditProduct from "../../components/ItemEditProduct";
-import ModalContext from "../../components/ModalContext";
 import { useRequestQueries } from "../../hooks/useRequestQueries";
+import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const MODE = {
   add: 1,
@@ -23,7 +23,7 @@ const objectUnits = getUnits();
 const objectCategories = getCategories();
 
 const Products = () => {
-  const { setParamsIfoModal } = useContext(ModalContext);
+  const { setParamsIfoModal } = useModalContext();
   const { data: dataUnits } = useRequestQueries(objectUnits, setParamsIfoModal);
   const { data: dataCategories } = useRequestQueries(objectCategories, setParamsIfoModal);
 

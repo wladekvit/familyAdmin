@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import style from "./Home.module.scss";
 import Button from "../../components/Button";
-import ModalContext from "../../components/ModalContext";
+import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const Home = () => {
-  const { setParamsIfoModal } = useContext(ModalContext);
-  const [count, setCount] = useState(0);
+  const { setParamsIfoModal } = useModalContext();
+  // const [count, setCount] = useState(0);
   const onClickButtonUpdate = async () => {
     setParamsIfoModal(true, "Привет", false);
   };
@@ -24,7 +24,7 @@ const Home = () => {
           <span>поступление средств</span>
         </div>
         <div className={style.infoCredit}>
-          <span>{count}</span>
+          <span>5000</span>
         </div>
         <Button title="обновить" clickCallBack={onClickButtonUpdate} />
       </div>

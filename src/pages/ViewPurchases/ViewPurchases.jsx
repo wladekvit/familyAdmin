@@ -16,7 +16,7 @@ import getPurchasesByPeriod from "../../queries/getPurchasesByPeriod";
 import SelectName from "./components/SelectName";
 import getPurchasesByName from "../../queries/getPurchasesByName";
 import { months } from "../../utils/constans";
-import ModalContext from "../../components/ModalContext";
+import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const StatusCheck = {
   all: 1,
@@ -26,7 +26,7 @@ const StatusCheck = {
 };
 
 const ViewPurchases = () => {
-  const { setParamsIfoModal } = useContext(ModalContext);
+  const { setParamsIfoModal } = useModalContext();
   const [statusCheck, setStatusCheck] = useState(StatusCheck.all);
   const [itemsData, setItemsData] = useState([]);
   const [selectDate, setSelectDate] = useState(getCurrentDate());
