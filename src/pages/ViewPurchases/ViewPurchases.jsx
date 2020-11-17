@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-// import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import style from "./ViewPurchases.module.scss";
 import Button from "../../components/Button";
 import Icon from "../../components/Icon/Icon";
@@ -35,21 +34,25 @@ const ViewPurchases = () => {
   const [selProduct, setSelProduct] = useState({});
 
   const onClickButtonLoad = () => {
+    let objParams;
     switch (statusCheck) {
       case StatusCheck.byDate:
-        getDataByDate().then();
+        objParams = getPurchasesByDate(selectDate);
         break;
       case StatusCheck.byPeriod:
-        getDataByPeriod().then();
+        objParams = getPurchasesByPeriod(selDateFrom, selDateTo);
         break;
       case StatusCheck.all:
-        getDataByAll().then();
+        objParams = getPurchases();
         break;
       case StatusCheck.byName:
-        getDataByName().then();
+        objParams = getPurchasesByName(selProduct.id, selDateFrom, selDateTo);
         break;
       default:
         break;
+    }
+    if (objParams) {
+      getDataPurchases(objParams).then();
     }
   };
   const getCurrentDateFromTo = () => {
@@ -62,9 +65,8 @@ const ViewPurchases = () => {
     setSelDateFrom(getCurrentDate(from));
     setSelDateTo(getCurrentDate(to));
   };
-  const getDataByAll = async () => {
+  const getDataPurchases = async (objParams) => {
     try {
-      const objParams = getPurchases();
       const purchases = await restRequest(objParams);
       if (purchases && purchases.hasOwnProperty("error")) {
         setParamsIfoModal(true, purchases.error, true);
@@ -76,56 +78,7 @@ const ViewPurchases = () => {
       setParamsIfoModal(true, "Что-то пошло не так", true);
       setItemsData([]);
     }
-  };
-  const getDataByDate = async () => {
-    try {
-      const objParams = getPurchasesByDate(selectDate);
-      const purchases = await restRequest(objParams);
-      // console.log(purchases);
-      if (purchases && purchases.hasOwnProperty("error")) {
-        setParamsIfoModal(true, purchases.error, true);
-        setItemsData([]);
-      } else {
-        setItemsData(purchases);
-      }
-    } catch (e) {
-      setParamsIfoModal(true, "Что-то пошло не так", true);
-      setItemsData([]);
-    }
-  };
-  const getDataByPeriod = async () => {
-    try {
-      const objParams = getPurchasesByPeriod(selDateFrom, selDateTo);
-      const purchases = await restRequest(objParams);
-      // console.log(purchases);
-      if (purchases && purchases.hasOwnProperty("error")) {
-        setParamsIfoModal(true, purchases.error, true);
-        setItemsData([]);
-      } else {
-        setItemsData(purchases);
-      }
-    } catch (e) {
-      setParamsIfoModal(true, "Что-то пошло не так", true);
-      setItemsData([]);
-    }
-  };
-  const getDataByName = async () => {
-    // console.log(selProduct);
-    try {
-      const objParams = getPurchasesByName(selProduct.id, selDateFrom, selDateTo);
-      const purchases = await restRequest(objParams);
-      // console.log(purchases);
-      if (purchases && purchases.hasOwnProperty("error")) {
-        setParamsIfoModal(true, purchases.error, true);
-        setItemsData([]);
-      } else {
-        setItemsData(purchases);
-      }
-    } catch (e) {
-      setParamsIfoModal(true, "Что-то пошло не так", true);
-      setItemsData([]);
-    }
-  };
+  }
   const removeItemPurchases = async (purchaseID) => {
     try {
       const objParams = deletePurchases(purchaseID);
@@ -154,7 +107,7 @@ const ViewPurchases = () => {
       setItemsData([]);
     }
   };
-  const getFunctionFroLoadData = () => {
+  const getFunctionFromLoadData = () => {
     if (itemsData) {
       return itemsData.map((item, index) => (
         <ItemsData
@@ -205,6 +158,7 @@ const ViewPurchases = () => {
     setStatusCheck(status);
     setItemsData([]);
   };
+
   useEffect(() => {
     getCurrentDateFromTo();
   }, []);
@@ -251,7 +205,7 @@ const ViewPurchases = () => {
           {statusCheck === StatusCheck.byName && (
             <SelectName productDefault={selProduct} setProductDefault={setSelProduct} />
           )}
-          <div className={style.containerData}>{getFunctionFroLoadData()}</div>
+          <div className={style.containerData}>{getFunctionFromLoadData()}</div>
         </div>
         <div className={style.infoFooter}>
           <Button

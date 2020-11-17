@@ -7,7 +7,7 @@ import updateProducts from "../../queries/updateProducts";
 import { restRequest } from "../../utils/restRequest";
 import removeProducts from "../../queries/removeProducts";
 import cn from "classnames/bind";
-import ModalContext from "../ModalContext";
+import { useModalContext } from "../ModalWrapper/ModalWrapper";
 
 const cx = cn.bind(s);
 
@@ -19,7 +19,7 @@ const MODE = {
 };
 
 const ItemEditProduct = ({ product, units, updatingProducts }) => {
-  const { setParamsIfoModal } = useContext(ModalContext);
+  const { setParamsIfoModal } = useModalContext();
   const [editMessage, setEditMessage] = useState("");
   const [selUnit, setSelUnit] = useState(product.unit);
   const [selName, setSelName] = useState(product.name);
