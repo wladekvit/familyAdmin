@@ -11,15 +11,21 @@ import addPurchases from "../../queries/addPurchases";
 import { customEventProducts } from "../../utils/constans";
 import { useRequestQueries } from "../../hooks/useRequestQueries";
 import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
+import CustomKeyBoard from "../../components/CastomKeyBoard";
 
 const objectUnits = getUnits();
 const objectCategories = getCategories();
+const STATUS = {
+  purchases: 1,
+  quantity: 2
+};
 
 const AddCredit = () => {
-  const { selectDate, changeSelectDate, setParamsIfoModal } = useModalContext();
+  const { selectDate, changeSelectDate, setParamsIfoModal, isMobile } = useModalContext();
   const { data: dataUnits } = useRequestQueries(objectUnits, setParamsIfoModal);
   const { data: dataCategories } = useRequestQueries(objectCategories, setParamsIfoModal);
 
+  const [customKeyboard, setCustomKeyboard] = useState({ visible: false, status: "" });
   const [modalSelectOpen, setModalSelectOpen] = useState(false);
   const [modalProductOpen, setModalProductOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -89,12 +95,23 @@ const AddCredit = () => {
     const prs = e.target.value.replace(",", ".");
     setPrice(prs);
   };
+  const onChangePriceMobile = (value) => {
+    setPrice(value);
+  };
   const onChangeQuantity = (e) => {
     const prs = e.target.value.replace(",", ".");
     setQuantity(prs);
   };
+  const onChangeQuantityMobile = (value) => {
+    setQuantity(value);
+  };
   const onChangeDate = (e) => {
     changeSelectDate(e.target.value);
+  };
+  const closeModalKeyboard = (value) => {
+    setCustomKeyboard((prev) => {
+      return { ...prev, visible: value };
+    });
   };
   const getUnitProduct = () => {
     if (selProduct) {
@@ -122,12 +139,12 @@ const AddCredit = () => {
   }, [onKeyDownHandler]);
 
   useEffect(() => {
-    dataUnits.sort((a, b) => a.unit > b.unit ? 1 : -1);
+    dataUnits.sort((a, b) => (a.unit > b.unit ? 1 : -1));
     setUnits(dataUnits);
   }, [dataUnits]);
 
   useEffect(() => {
-    dataCategories.sort((a, b) => a.category > b.category ? 1 : -1);
+    dataCategories.sort((a, b) => (a.category > b.category ? 1 : -1));
     setCategories(dataCategories);
   }, [dataCategories]);
 
@@ -138,9 +155,15 @@ const AddCredit = () => {
     };
   }, []);
 
+  useEffect(() => {
+    {console.log("%cRENDER COMPONENT AddCredit", "color: #00ff00", dataUnits)}
+  });
+
+  if ( dataUnits.length === 0 || dataCategories.length ===0 ) return null;
+
   return (
     <div className={style.wrapper}>
-      {/*{console.log("%cRENDER COMPONENT AddCredit", "color: #00ff00")}*/}
+
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <span>что купил то внеси 🤠</span>
@@ -164,17 +187,29 @@ const AddCredit = () => {
           />
           <span>Сколько это стояло 🏧, в ГРН</span>
           <input
-            type="number"
+            type={isMobile ? "text" : "number"}
             placeholder="🖋 цена покупки 0"
             value={price}
-            onChange={onChangePrice}
+            onClick={
+              isMobile
+                ? () => setCustomKeyboard({ visible: true, status: STATUS.purchases })
+                : () => {}
+            }
+            onChange={!isMobile ? onChangePrice : () => {}}
+            readOnly={isMobile}
           />
           <span>{`Количество в (${getUnitProduct()})`}</span>
           <input
-            type="number"
+            type={isMobile ? "text" : "number"}
             placeholder={`🖋 сколько купил (${getUnitProduct()})`}
             value={quantity}
-            onChange={onChangeQuantity}
+            onChange={!isMobile ? onChangeQuantity : () => {}}
+            onClick={
+              isMobile
+                ? () => setCustomKeyboard({ visible: true, status: STATUS.quantity })
+                : () => {}
+            }
+            readOnly={isMobile}
           />
           <span>Когда купил 🏧</span>
           <input type="date" defaultValue={selectDate} onChange={onChangeDate} />
@@ -199,6 +234,15 @@ const AddCredit = () => {
         categories={products}
         onSelectCategories={onSelectProduct}
       />
+      {isMobile && <CustomKeyBoard
+        title={customKeyboard.status === STATUS.purchases ? "Какая цена" : "Какое количество"}
+        isOpen={customKeyboard.visible}
+        closeOpen={closeModalKeyboard}
+        value={customKeyboard.status === STATUS.purchases ? price.split("") : quantity.split("")}
+        callback={
+          customKeyboard.status === STATUS.purchases ? onChangePriceMobile : onChangeQuantityMobile
+        }
+      />}
     </div>
   );
 };

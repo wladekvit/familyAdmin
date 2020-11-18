@@ -12,11 +12,14 @@ export const useModalContext = () => {
 const DEFAULT_DURATION = 5000;
 
 const ModalWrapper = ({ children }) => {
+
   const [selectCurrentDate, setSelectCurrentDate] = useState(getCurrentDate());
   const [isOpen, setIsOpen] = useState(false);
   const [messageModal, setMessageModal] = useState("");
   const [successModal, setSuccessModal] = useState(true);
   const [duration, setDuration] = useState(DEFAULT_DURATION);
+  const isMobile = /Mobile|webOS|BlackBerry|IEMobile|MeeGo|mini|Fennec|Windows Phone|Android|iP(ad|od|hone)/i.test(navigator.userAgent);
+
 
   const setStateModalHook = (open = false, message = "", success = successModal, currDuration) => {
     if (typeof message === "string") {
@@ -43,7 +46,8 @@ const ModalWrapper = ({ children }) => {
       value={{
         setParamsIfoModal: setStateModalHook,
         selectDate: selectCurrentDate,
-        changeSelectDate
+        changeSelectDate,
+        isMobile
       }}
     >
       <Fragment>

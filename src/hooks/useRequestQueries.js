@@ -10,8 +10,9 @@ export function useRequestQueries(objParams, showModalInfo) {
   };
 
   const requestAction = async () => {
+    console.log("requestAction", data);
     try {
-      const data = await restRequest(objParams, true);
+      const data = await restRequest(objParams);
       if (data && data.hasOwnProperty("error")) {
         showModalInfo(true, data.error, false);
       } else {
@@ -23,10 +24,9 @@ export function useRequestQueries(objParams, showModalInfo) {
   };
 
   useEffect(() => {
-    requestAction().then(() => {
-      // console.log(data);
-    });
+    requestAction().then();
   }, [count]);
+
 
   return { data, forceRequest };
 }

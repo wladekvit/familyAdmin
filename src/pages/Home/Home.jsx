@@ -6,14 +6,9 @@ import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const Home = () => {
   const { setParamsIfoModal } = useModalContext();
-  // const [count, setCount] = useState(0);
   const onClickButtonUpdate = async () => {
     setParamsIfoModal(true, "Привет", false);
   };
-
-  // useEffect(() => {
-  //   setCount((prev) => prev + 1);
-  // });
 
   return (
     <div className={style.wrapper}>
@@ -24,7 +19,7 @@ const Home = () => {
           <span>поступление средств</span>
         </div>
         <div className={style.infoCredit}>
-          <span>5000</span>
+          <span>0</span>
         </div>
         <Button title="обновить" clickCallBack={onClickButtonUpdate} />
       </div>

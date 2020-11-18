@@ -1,4 +1,4 @@
-import React, { Fragment, cloneElement, useState } from "react";
+import React, { Fragment, cloneElement, useState, useEffect } from "react";
 import ReactModal from "react-modal";
 import s from "./Modal.module.scss";
 import cn from "classnames/bind";
@@ -15,7 +15,11 @@ const Modal = ({
   showCloseButton = true,
   ...props
 }) => {
-  const [titleText] = useState(title);
+  const [titleText, setTitleText] = useState(title);
+
+  useEffect(() => {
+    setTitleText(title);
+  }, [title]);
 
   return (
     <ReactModal

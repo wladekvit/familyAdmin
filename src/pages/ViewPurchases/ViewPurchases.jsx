@@ -134,7 +134,7 @@ const ViewPurchases = () => {
       const sum = itemsData.reduce(function (accumulator, currentValue) {
         return accumulator + currentValue.quality;
       }, initialValue);
-      return `${sum} (${unit})`;
+      return `${sum.toFixed(2)} (${unit})`;
     }
     return "";
   };

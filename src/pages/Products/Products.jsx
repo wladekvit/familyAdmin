@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useCallback, useContext, useEffect, useState } from "react";
+/* eslint-disable jsx-a11y/accessible-emoji,react-hooks/exhaustive-deps */
+import React, { useCallback, useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import style from "./Products.module.scss";
 import Button from "../../components/Button";
