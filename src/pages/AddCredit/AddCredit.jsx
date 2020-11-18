@@ -155,9 +155,9 @@ const AddCredit = () => {
     };
   }, []);
 
-  useEffect(() => {
-    {console.log("%cRENDER COMPONENT AddCredit", "color: #00ff00", dataUnits)}
-  });
+  /*useEffect(() => {
+    console.log("%cRENDER COMPONENT AddCredit", "color: #00ff00", dataUnits);
+  });*/
 
   if ( dataUnits.length === 0 || dataCategories.length ===0 ) return null;
 

@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 import s from "./CustomKeyBoard.module.scss";
 import Modal from "../Modal";
 
+const buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0"];
+
 const CustomKeyBoard = ({ isOpen, title, closeOpen, value, callback }) => {
-  console.log(title);
   const [timerItem, setTimerItem] = useState(null);
   const addValue = (val) => {
-
     if (val === "." && value.includes(".")) {
       return;
     }
@@ -20,11 +20,10 @@ const CustomKeyBoard = ({ isOpen, title, closeOpen, value, callback }) => {
       const flt = parseFloat(res.join("")) + "";
       res = flt.split("");
     }
-
     navigator.vibrate(40);
     callback(res.join(""));
   };
-  const delValue = (e) => {
+  const delValue = () => {
     navigator.vibrate(40);
     const res = [...value];
     const timer = setTimeout(() => {
@@ -34,11 +33,15 @@ const CustomKeyBoard = ({ isOpen, title, closeOpen, value, callback }) => {
     callback(res.join(""));
     setTimerItem(timer);
   };
-  const clearTimer =() => {
+  const sendValue = () => {
+    closeOpen(false);
+    const flt = parseFloat([...value].join("")) + "";
+    callback(flt);
+  }
+  const clearTimer = () => {
     clearTimeout(timerItem);
     setTimerItem(null);
   };
-
 
   return (
     <Modal isOpen={isOpen} onRequestClose={() => closeOpen(false)} title={title}>
@@ -47,44 +50,16 @@ const CustomKeyBoard = ({ isOpen, title, closeOpen, value, callback }) => {
           <input value={value.join("")} type="text" readOnly={true} disabled={false} />
         </section>
         <section className={s.container}>
-          <div onTouchStart={() => addValue(1)}>
-            <span>1</span>
-          </div>
-          <div onTouchStart={() => addValue(2)}>
-            <span>2</span>
-          </div>
-          <div onTouchStart={() => addValue(3)}>
-            <span>3</span>
-          </div>
-          <div onTouchStart={() => addValue(4)}>
-            <span>4</span>
-          </div>
-          <div onTouchStart={() => addValue(5)}>
-            <span>5</span>
-          </div>
-          <div onTouchStart={() => addValue(6)}>
-            <span>6</span>
-          </div>
-          <div onTouchStart={() => addValue(7)}>
-            <span>7</span>
-          </div>
-          <div onTouchStart={() => addValue(8)}>
-            <span>8</span>
-          </div>
-          <div onTouchStart={() => addValue(9)}>
-            <span>9</span>
-          </div>
-          <div onTouchStart={() => addValue(".")}>
-            <span>.</span>
-          </div>
-          <div onTouchStart={() => addValue(0)}>
-            <span>0</span>
-          </div>
+          {buttons.map((but, i) => (
+            <div key={i} onTouchStart={() => addValue(but)}>
+              <span>{but}</span>
+            </div>
+          ))}
           <div onTouchStart={delValue} onTouchEnd={clearTimer}>
             <span>⇐</span>
           </div>
         </section>
-        <section className={s.inputFooter} onTouchStart={() => closeOpen(false)}>
+        <section className={s.inputFooter} onTouchStart={sendValue}>
           <span>OK</span>
         </section>
       </div>
@@ -97,7 +72,7 @@ CustomKeyBoard.propTypes = {
   isOpen: PropTypes.bool,
   closeOpen: PropTypes.func,
   value: PropTypes.array,
-  callback: PropTypes.func,
+  callback: PropTypes.func
 };
 
 CustomKeyBoard.defaultProps = {
