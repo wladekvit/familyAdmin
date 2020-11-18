@@ -163,7 +163,6 @@ const AddCredit = () => {
 
   return (
     <div className={style.wrapper}>
-
       <div className={style.container_sections}>
         <div className={style.infoTitle}>
           <span>что купил то внеси 🤠</span>
