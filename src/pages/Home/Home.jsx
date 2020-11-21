@@ -1,14 +1,25 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import style from "./Home.module.scss";
 import Button from "../../components/Button";
 import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const Home = () => {
-  const { setParamsIfoModal } = useModalContext();
+  const { setParamsIfoModal, store } = useModalContext();
   const onClickButtonUpdate = async () => {
-    setParamsIfoModal(true, "Привет", false);
+    setParamsIfoModal(true, "Привет", true);
   };
+
+  const changeCategories = () => {
+    console.log("STORE WORKING!!!", store.getState());
+  }
+
+
+
+  useEffect(() => {
+    store.subscribe(changeCategories);
+  }, []);
 
   return (
     <div className={style.wrapper}>
