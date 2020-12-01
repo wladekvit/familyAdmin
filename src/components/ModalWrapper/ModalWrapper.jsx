@@ -4,9 +4,9 @@ import ModalInfo from "../ModalInfo";
 import { getCurrentDate } from "../../utils/initialisation";
 import getCategories from "../../queries/getCategories";
 import { restRequest } from "../../utils/restRequest";
-import { ADD_PRODUCT, customEventCategory, customEventProducts } from "../../utils/constans";
-import { createStore } from "../../store/createStore";
-import { rootReducer } from "../../store/rootReducer";
+import { customEventCategory, customEventProducts } from "../../utils/constans";
+// import { createStore } from "../../store/createStore";
+// import { rootReducer } from "../../store/rootReducer";
 
 const ModalContext = React.createContext(null);
 
@@ -16,7 +16,7 @@ export const useModalContext = () => {
 
 const DEFAULT_DURATION = 5000;
 
-const store = createStore(rootReducer, {units: [], categories: []});
+// const store = createStore(rootReducer, {units: [], categories: []});
 
 const ModalWrapper = ({ children }) => {
 
@@ -39,7 +39,7 @@ const ModalWrapper = ({ children }) => {
     const products = ["addProducts", "removeProducts", "updateProducts"];
     if (categories.findIndex((ob) => response.data === ob) !== -1) {
       const objParams = getCategories();
-      restRequest(objParams, true).then((data) => {
+      restRequest(objParams, true).then(() => {
         window.dispatchEvent(new CustomEvent(customEventCategory));
       });
     } else if (products.findIndex((ob) => response.data === ob) !== -1) {
@@ -53,7 +53,7 @@ const ModalWrapper = ({ children }) => {
     ws.onopen = openWebSocked;
     ws.onclose = closeWebSocked;
     ws.onmessage = messageWebSocked;
-    console.log(store.getState());
+    // console.log(store.getState());
   }, []);
 
 
@@ -80,7 +80,7 @@ const ModalWrapper = ({ children }) => {
   return (
     <ModalContext.Provider
       value={{
-        store,
+        // store,
         setParamsIfoModal: setStateModalHook,
         selectDate: selectCurrentDate,
         changeSelectDate,

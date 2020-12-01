@@ -6,20 +6,20 @@ import Button from "../../components/Button";
 import { useModalContext } from "../../components/ModalWrapper/ModalWrapper";
 
 const Home = () => {
-  const { setParamsIfoModal, store } = useModalContext();
+  const { setParamsIfoModal } = useModalContext();
   const onClickButtonUpdate = async () => {
     setParamsIfoModal(true, "Привет", true);
   };
 
-  const changeCategories = () => {
-    console.log("STORE WORKING!!!", store.getState());
-  }
+  // const changeCategories = () => {
+  //   console.log("STORE WORKING!!!", store.getState());
+  // }
 
 
 
-  useEffect(() => {
-    store.subscribe(changeCategories);
-  }, []);
+  // useEffect(() => {
+  //   store.subscribe(changeCategories);
+  // }, []);
 
   return (
     <div className={style.wrapper}>
